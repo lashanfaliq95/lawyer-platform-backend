@@ -11,7 +11,6 @@ const app = express();
 if (process.env.NODE_ENV !== 'prod') {
   require('dotenv').config();
 }
-console.log(process.env.MYSQL_HOST);
 
 app.use(logger('dev'));
 app.use(express.json());
