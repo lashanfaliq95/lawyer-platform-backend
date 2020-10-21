@@ -6,28 +6,28 @@ if (process.env.NODE_ENV !== 'prod') {
 }
 
 exports.login = async (req, res) => {
-  const { userName, password } = req.body;
-  if (userName && password) {
+  const { email, password } = req.body;
+  if (email && password) {
+    ``;
     try {
       const result = await authDao.authorizeUser({
-        userName,
+        email,
         password,
       });
       if (result && result.length !== 0) {
         const user = result[0];
 
         const accessToken = jwt.sign(
-          { username: user.user_name },
+          { email: user.email },
           process.env.ACCESS_TOKEN_SECRET,
           { expiresIn: '20m' }
         );
         const refreshToken = jwt.sign(
-          { username: user.username, role: user.role },
+          { email: user.email, role: user.role },
           process.env.REFRESH_TOKEN_SECRET
         );
 
-        await authDao.setRefreshToken({ userName, refreshToken });
-
+        await authDao.setRefreshToken({ email, refreshToken });
         res.status(200).json({
           accessToken,
           refreshToken,
@@ -38,6 +38,7 @@ exports.login = async (req, res) => {
           .json({ message: 'User name or password did not match.' });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).send({ error });
     }
   } else {
@@ -66,7 +67,7 @@ exports.token = async (req, res) => {
       }
 
       const accessToken = jwt.sign(
-        { username: result[0].user_name },
+        { email: result[0].email },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '20m' }
       );
