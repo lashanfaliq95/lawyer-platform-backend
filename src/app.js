@@ -6,6 +6,7 @@ const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
 
 const app = express();
 
@@ -15,7 +16,7 @@ if (process.env.NODE_ENV !== 'prod') {
 
 const corsOptions = {
   origin: 'http://localhost:3000',
-}
+};
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use('*', cors(corsOptions));
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/users', userRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

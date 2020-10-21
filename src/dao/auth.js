@@ -1,28 +1,11 @@
 const getConnection = require('../connectors/mysqlConnector');
 
-exports.authorizeUser = async ({ email, password }) => {
+exports.setRefreshToken = async ({ id, refreshToken }) => {
   return await new Promise((resolve, reject) => {
     return getConnection(async (connection) => {
       connection.query(
-        'SELECT * FROM users WHERE email=? AND password=?',
-        [email, password],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
-};
-
-exports.setRefreshToken = async ({ email, refreshToken }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'INSERT INTO auth (email,refresh_token) values(?, ?)',
-        [email, refreshToken],
+        'INSERT INTO auth (id,refresh_token) values(?, ?)',
+        [id, refreshToken],
         (error, result) => {
           if (error) {
             reject(error);
