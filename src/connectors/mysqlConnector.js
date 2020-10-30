@@ -11,7 +11,6 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DB,
 });
 
-// Call connection.release() at end
 const getConnection = async (actionAsync) => {
   const connection = await new Promise((resolve, reject) => {
     pool.getConnection((error, connection) => {

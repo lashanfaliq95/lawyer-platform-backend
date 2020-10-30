@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const { v4: uuidv4 } = require('uuid');
 
 const saltRounds = 10;
@@ -24,3 +25,13 @@ exports.comparePassword = (inputPassword, dbPassword) =>
   });
 
 exports.createUserId = () => uuidv4();
+
+exports.createToken = () =>
+  new Promise((resolve, reject) => {
+    crypto.randomBytes(48, (err, buffer) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(buffer.toString('hex'));
+    });
+  });

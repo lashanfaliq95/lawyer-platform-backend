@@ -1,9 +1,16 @@
 const authDao = require('../dao/users');
 const userUtil = require('../utils/auth');
 
-exports.register = async (req, res) => {
-  const { firstName, lastName, mobilePhone, email, password } = req.body;
-  if (firstName && lastName && mobilePhone && email && password) {
+exports.createUser = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    mobilePhone,
+    email,
+    password,
+    roleId,
+  } = req.body;
+  if ((firstName && lastName && mobilePhone && email && password, roleId)) {
     try {
       const id = userUtil.createUserId();
       const encryptedPassword = await userUtil.encryptPassword(password);
@@ -13,6 +20,7 @@ exports.register = async (req, res) => {
         lastName,
         mobilePhone,
         email,
+        roleId,
         password: encryptedPassword,
       });
 
@@ -21,6 +29,65 @@ exports.register = async (req, res) => {
           id: id,
           email: email,
         };
+        res.status(200).send({ data: userResponse });
+      }
+    } catch (error) {
+      res.status(500).send({ message: 'Something went wrong.' });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid parameters' });
+  }
+};
+
+exports.getUser = async (req, res) => {
+  const { id } = req.body;
+  if (id) {
+    try {
+      const result = await authDao.getUsers();
+      if (result) {
+        res.status(200).send({ data: userResponse });
+      }
+    } catch (error) {
+      res.status(500).send({ message: 'Something went wrong.' });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid parameters' });
+  }
+};
+
+exports.getLawyers = async (req, res) => {
+  try {
+    const result = await authDao.getLawyers();
+    if (result) {
+      res.status(200).send(result);
+    }
+  } catch (error) {
+    res.status(500).send({ message: 'Something went wrong.' });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.body;
+  if (id) {
+    try {
+      const result = await authDao.deleteUser({ id });
+      if (result) {
+        res.status(200).send({ data: userResponse });
+      }
+    } catch (error) {
+      res.status(500).send({ message: 'Something went wrong.' });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid parameters' });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  const { id } = req.body;
+  if (id) {
+    try {
+      const result = await authDao.deleteUser({ id });
+      if (result) {
         res.status(200).send({ data: userResponse });
       }
     } catch (error) {

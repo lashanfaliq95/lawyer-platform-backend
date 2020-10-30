@@ -2,7 +2,11 @@ const jwt = require('jsonwebtoken');
 
 const authDao = require('../dao/auth');
 const userDao = require('../dao/users');
+
 const authUtil = require('../utils/auth');
+const dateUtil = require('../utils/date');
+
+const emailHelper = require('../helper/emailHelper');
 
 if (process.env.NODE_ENV !== 'prod') {
   require('dotenv').config();
@@ -13,7 +17,6 @@ exports.login = async (req, res) => {
   if (email && password) {
     try {
       const result = await userDao.getPasswordOfUser({ email });
-
       if (result && result.length !== 0) {
         const user = result[0];
 
@@ -33,7 +36,7 @@ exports.login = async (req, res) => {
             process.env.REFRESH_TOKEN_SECRET
           );
 
-          await authDao.setRefreshToken({ id: user.id, refreshToken });
+          await authDao.setRefreshToken({ refreshToken });
           res.status(200).json({
             accessToken,
             refreshToken,
@@ -44,7 +47,9 @@ exports.login = async (req, res) => {
           });
         }
       } else {
-        res.status(500).json({ message: 'Some thing went wrong' });
+        res
+          .status(401)
+          .json({ message: 'User name or password did not match.' });
       }
     } catch (error) {
       res.status(500).send({ message: 'Some thing went wrong' });
@@ -87,11 +92,62 @@ exports.token = async (req, res) => {
   }
 };
 
+exports.forgot = async (req, res) => {
+  const { email } = req.body;
+  if (email) {
+    try {
+      const result = await userDao.getIdOfUser({ email });
+      if (result && result.length > 0) {
+        const { id } = result[0];
+        const resetToken = await authUtil.createToken();
+        const expirationTimeString = dateUtil.timestampInComingHours();
+
+        await userDao.savePasswordResetToken({
+          id,
+          resetToken,
+          expirationTimeString,
+        });
+        const emailResult = await emailHelper.sendMail({
+          to: email,
+          resetToken,
+        });
+        res.status(200).json({data:emailResult});
+      }else{
+        res.status(401).json({ message: 'Email not found' });
+
+      }
+    } catch (error) {
+      res.status(500).send({ error });
+    }
+  } else {
+    res.status(401).json({ message: 'User name or password not defined.' });
+  }
+};
+
+exports.getResetToken = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const result = await authDao.getResetTokenExpiration({ token });
+    if (result && result.length > 0) {
+      const { id, reset_token_expiration } = result[0];
+      if (dateUtil.hasTimestampExpired(reset_token_expiration)) {
+        res.status(200).json({ id });
+      } else {
+        res.status(401).json({ message: 'Reset token has expired' });
+      }
+    } else {
+      res.status(401).send({ message: 'Token not found' });
+    }
+  } catch (error) {
+    res.status(500).send({ error });
+  }
+};
+
 exports.logout = async (req, res) => {
   try {
     const { refreshToken } = req.body;
     await authDao.deleteRefreshToken({ refreshToken });
-    res.send('Logout successful');
+    res.status(200).send('Logout successful');
   } catch (error) {
     res.status(500).send({ error });
   }
