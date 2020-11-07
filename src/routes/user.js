@@ -6,5 +6,4 @@ router.post('/', userController.createUser);
 
 router.get('/lawyers', userController.getLawyers);
 
-
 module.exports = router;

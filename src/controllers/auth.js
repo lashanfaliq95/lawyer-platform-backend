@@ -111,10 +111,9 @@ exports.forgot = async (req, res) => {
           to: email,
           resetToken,
         });
-        res.status(200).json({data:emailResult});
-      }else{
+        res.status(200).json({ data: emailResult });
+      } else {
         res.status(401).json({ message: 'Email not found' });
-
       }
     } catch (error) {
       res.status(500).send({ error });

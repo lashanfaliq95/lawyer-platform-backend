@@ -63,7 +63,7 @@ exports.getLawyers = async () => {
   return await new Promise((resolve, reject) => {
     return getConnection(async (connection) => {
       connection.query(
-        'SELECT id, CONCAT(first_name," ", last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone FROM users WHERE role_id=2',
+        'SELECT id, CONCAT(first_name," ", last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, latitude, longitude FROM users WHERE role_id=2',
         (error, result) => {
           if (error) {
             reject(error);

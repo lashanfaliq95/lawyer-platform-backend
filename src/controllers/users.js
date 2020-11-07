@@ -1,4 +1,4 @@
-const authDao = require('../dao/users');
+const userDao = require('../dao/users');
 const userUtil = require('../utils/auth');
 
 exports.createUser = async (req, res) => {
@@ -14,7 +14,7 @@ exports.createUser = async (req, res) => {
     try {
       const id = userUtil.createUserId();
       const encryptedPassword = await userUtil.encryptPassword(password);
-      const result = await authDao.registerUser({
+      const result = await userDao.registerUser({
         id,
         firstName,
         lastName,
@@ -43,7 +43,7 @@ exports.getUser = async (req, res) => {
   const { id } = req.body;
   if (id) {
     try {
-      const result = await authDao.getUsers();
+      const result = await userDao.getUsers();
       if (result) {
         res.status(200).send({ data: userResponse });
       }
@@ -57,7 +57,7 @@ exports.getUser = async (req, res) => {
 
 exports.getLawyers = async (req, res) => {
   try {
-    const result = await authDao.getLawyers();
+    const result = await userDao.getLawyers();
     if (result) {
       res.status(200).send(result);
     }
@@ -70,7 +70,7 @@ exports.deleteUser = async (req, res) => {
   const { id } = req.body;
   if (id) {
     try {
-      const result = await authDao.deleteUser({ id });
+      const result = await userDao.deleteUser({ id });
       if (result) {
         res.status(200).send({ data: userResponse });
       }
@@ -86,7 +86,7 @@ exports.updateUser = async (req, res) => {
   const { id } = req.body;
   if (id) {
     try {
-      const result = await authDao.deleteUser({ id });
+      const result = await userDao.deleteUser({ id });
       if (result) {
         res.status(200).send({ data: userResponse });
       }
