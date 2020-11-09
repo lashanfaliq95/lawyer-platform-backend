@@ -75,6 +75,24 @@ exports.getLawyers = async () => {
   });
 };
 
+exports.getLawyerAvailability = async ({ id, startDate }) => {
+  console.log(id,startDate)
+  return await new Promise((resolve, reject) => {
+    return getConnection(async (connection) => {
+      connection.query(
+        'SELECT lawyer_id AS id, time_slot AS timeSlot, date, day_of_week as dayOfWeek FROM lawyer_availability WHERE available=true AND lawyer_id=? AND date> ? AND date < DATE_ADD(?,INTERVAL 1 WEEK)',
+        [id, startDate, startDate],
+        (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+        }
+      );
+    });
+  });
+};
+
 exports.savePasswordResetToken = async ({
   id,
   resetToken,

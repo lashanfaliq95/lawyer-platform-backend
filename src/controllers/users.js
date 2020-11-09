@@ -1,5 +1,7 @@
 const userDao = require('../dao/users');
-const userUtil = require('../utils/auth');
+const authUtil = require('../utils/auth');
+const dateUtil = require('../utils/date');
+const userUtil = require('../utils/user');
 
 exports.createUser = async (req, res) => {
   const {
@@ -12,8 +14,8 @@ exports.createUser = async (req, res) => {
   } = req.body;
   if ((firstName && lastName && mobilePhone && email && password, roleId)) {
     try {
-      const id = userUtil.createUserId();
-      const encryptedPassword = await userUtil.encryptPassword(password);
+      const id = authUtil.createUserId();
+      const encryptedPassword = await authUtil.encryptPassword(password);
       const result = await userDao.registerUser({
         id,
         firstName,
@@ -62,6 +64,29 @@ exports.getLawyers = async (req, res) => {
       res.status(200).send(result);
     }
   } catch (error) {
+    res.status(500).send({ message: 'Something went wrong.' });
+  }
+};
+
+exports.getLawyerAvailability = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { startDate } = req.query;
+    if (id) {
+      const result = await userDao.getLawyerAvailability({
+        id,
+        startDate: dateUtil.getMySqlDate(startDate),
+      });
+      if (result && result.length > 0) {
+        res.status(200).send(userUtil.formatResponse(id, result));
+      } else {
+        res.status(200).send(result);
+      }
+    } else {
+      res.status(400).json({ message: 'Invalid parameters' });
+    }
+  } catch (error) {
+    console.log(error);
     res.status(500).send({ message: 'Something went wrong.' });
   }
 };

@@ -11,3 +11,6 @@ exports.hasTimestampExpired = (expirationTimeStamp) => {
   }
   return true;
 };
+
+exports.getMySqlDate = (date) => date.slice(0, 10);
+
