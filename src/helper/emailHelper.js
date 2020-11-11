@@ -20,8 +20,37 @@ const createEmail = ({ to, subject, text, resetToken }) => {
   };
 };
 
+const createPasswordResetSuccessEmail = ({ to, subject, text, resetToken }) => {
+  return {
+    to: to,
+    from: fromEmail,
+    subject: subject || 'Your password has been changed',
+    text: 'Hello,\n\n' +
+      'This is a confirmation that the password for your account ' + to + ' has just been changed.\n'
+  };
+};
+
 exports.sendMail = ({ to, subject, text, resetToken }) => {
   const email = createEmail({
+    to,
+    subject,
+    text,
+    resetToken,
+  });
+  return new Promise((resolve, reject) => {
+    sgMail.send(email).then(
+      () => {
+        resolve({ message: 'Successfully send email' });
+      },
+      (error) => {
+        reject({ error });
+      }
+    );
+  });
+};
+
+exports.sendPasswordResetSuccessEmail = ({ to, subject, text, resetToken }) => {
+  const email = createPasswordResetSuccessEmail({
     to,
     subject,
     text,

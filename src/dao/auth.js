@@ -39,7 +39,7 @@ exports.getResetTokenExpiration = async ({ token }) => {
   return await new Promise((resolve, reject) => {
     return getConnection(async (connection) => {
       connection.query(
-        'SELECT id, reset_token_expiration FROM users where reset_token = ?',
+        'SELECT id, reset_token_expiration, email FROM users where reset_token = ?',
         [token],
         (error, result) => {
           if (error) {

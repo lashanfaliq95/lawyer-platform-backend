@@ -14,24 +14,29 @@ exports.createUser = async (req, res) => {
   } = req.body;
   if ((firstName && lastName && mobilePhone && email && password, roleId)) {
     try {
-      const id = authUtil.createUserId();
-      const encryptedPassword = await authUtil.encryptPassword(password);
-      const result = await userDao.registerUser({
-        id,
-        firstName,
-        lastName,
-        mobilePhone,
-        email,
-        roleId,
-        password: encryptedPassword,
-      });
+      const userIds = await userDao.getUserIdFromEmail({ email });
+      if (userIds && userIds.length === 0) {
+        const id = authUtil.createUserId();
+        const encryptedPassword = await authUtil.encryptPassword(password);
+        const result = await userDao.registerUser({
+          id,
+          firstName,
+          lastName,
+          mobilePhone,
+          email,
+          roleId,
+          password: encryptedPassword,
+        });
 
-      if (result) {
-        const userResponse = {
-          id: id,
-          email: email,
-        };
-        res.status(200).send({ data: userResponse });
+        if (result) {
+          const userResponse = {
+            id: id,
+            email: email,
+          };
+          res.status(200).send({ data: userResponse });
+        }
+      } else {
+        res.status(400).json({ message: 'User already exists' });
       }
     } catch (error) {
       res.status(500).send({ message: 'Something went wrong.' });

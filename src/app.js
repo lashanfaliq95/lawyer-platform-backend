@@ -14,16 +14,24 @@ if (process.env.NODE_ENV !== 'prod') {
   require('dotenv').config();
 }
 
-const corsOptions = {
-  origin: 'http://localhost:3000',
-};
+var whitelist = ['http://localhost:3000', 'http://lawyer-platform.s3-website.eu-central-1.amazonaws.com/']
+
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (whitelist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false } // disable CORS for this request
+  }
+  callback(null, corsOptions) // callback expects two parameters: error and options
+}
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('*', cors(corsOptions));
+app.use('*', cors(corsOptionsDelegate));
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/search', searchRouter);

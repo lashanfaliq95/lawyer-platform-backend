@@ -40,22 +40,24 @@ exports.login = async (req, res) => {
           res.status(200).json({
             accessToken,
             refreshToken,
+            id: user.id,
+            roleId: user.roleId,
           });
         } else {
-          res.status(401).json({
-            message: 'User name or password did not match.',
+          res.status(400).json({
+            error: 'User name or password did not match.',
           });
         }
       } else {
         res
-          .status(401)
+          .status(400)
           .json({ message: 'User name or password did not match.' });
       }
     } catch (error) {
       res.status(500).send({ message: 'Some thing went wrong' });
     }
   } else {
-    res.status(401).json({ message: 'User name or password not defined.' });
+    res.status(400).json({ message: 'User name or password not defined.' });
   }
 };
 
@@ -116,10 +118,32 @@ exports.forgot = async (req, res) => {
         res.status(401).json({ message: 'Email not found' });
       }
     } catch (error) {
-      res.status(500).send({ error });
+      res.status(500).json({ error });
     }
   } else {
     res.status(401).json({ message: 'User name or password not defined.' });
+  }
+};
+
+exports.resetUserPassword = async (req, res) => {
+  try {
+    const { id, password, email } = req.body;
+    if (id && password) {
+      const encryptedPassword = await authUtil.encryptPassword(password);
+      await userDao.saveUserPassword({
+        id,
+        password: encryptedPassword,
+      });
+       await emailHelper.sendPasswordResetSuccessEmail({
+        to: email,
+      });
+
+      res.status(200).json({ message: 'Password Reset success' });
+    } else {
+      res.status(400).json({ message: 'Invalid parameters' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Password Reset failure' });
   }
 };
 
@@ -128,17 +152,17 @@ exports.getResetToken = async (req, res) => {
     const { token } = req.params;
     const result = await authDao.getResetTokenExpiration({ token });
     if (result && result.length > 0) {
-      const { id, reset_token_expiration } = result[0];
+      const { id, reset_token_expiration, email } = result[0];
       if (dateUtil.hasTimestampExpired(reset_token_expiration)) {
-        res.status(200).json({ id });
+        res.status(200).json({ id, email });
       } else {
-        res.status(401).json({ message: 'Reset token has expired' });
+        res.status(400).json({ message: 'Reset token has expired' });
       }
     } else {
-      res.status(401).send({ message: 'Token not found' });
+      res.status(400).json({ message: 'Token not found' });
     }
   } catch (error) {
-    res.status(500).send({ error });
+    res.status(500).json({ error });
   }
 };
 
