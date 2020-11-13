@@ -1,7 +1,7 @@
 const sgMail = require('../connectors/sendGridMailer');
 
 const fromEmail = 'lashanfaliq@gmail.com';
-const host = 'http://lawyer-platform.s3-website.eu-central-1.amazonaws.com';
+const host = 'lawyer-platform.s3-website.eu-central-1.amazonaws.com';
 
 const createEmail = ({ to, subject, text, resetToken }) => {
   return {
