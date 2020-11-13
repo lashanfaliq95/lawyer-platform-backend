@@ -38,7 +38,11 @@ exports.filterLawyers = async (req, res) => {
       languages: languageArray,
       nameOrFirm,
     });
-    res.status(200).send(result);
+    const updatedResult=result && result.map((lawyer)=> ({
+      ...lawyer, 
+      specializationIds:lawyer.specializationIds ? lawyer.specializationIds.split(',').map((id)=>parseInt(id)) : null
+    }));
+    res.status(200).send(updatedResult);
   } catch (error) {
     res.status(500).send({ message: 'Something went wrong.' });
   }

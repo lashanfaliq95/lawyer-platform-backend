@@ -9,7 +9,6 @@ router.get('/lawyers', authenticateJWT, userController.getLawyers);
 
 router.get(
   '/lawyers/availability/:id',
-  authenticateJWT,
   userController.getLawyerAvailability
 );
 
