@@ -83,7 +83,7 @@ exports.getLawyerAvailability = async (req, res) => {
         startDate: dateUtil.getMySqlDate(startDate),
       });
       if (result && result.length > 0) {
-        res.status(200).send(userUtil.formatResponse(id, result));
+        res.status(200).send(userUtil.formatResponse(id, result, startDate));
       } else {
         res.status(200).send(result);
       }
