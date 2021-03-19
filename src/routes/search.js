@@ -6,4 +6,8 @@ router.get('/lawyers', searchController.filterLawyers);
 
 router.get('/filters', searchController.getFilters);
 
+router.get('/suggestions', searchController.getSuggestions);
+
+router.get('/suggestions/locations', searchController.getPlaces);
+
 module.exports = router;

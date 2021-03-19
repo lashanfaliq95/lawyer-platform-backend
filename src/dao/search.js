@@ -27,6 +27,37 @@ exports.getLanguagesFilters = async () => {
   });
 };
 
+exports.getNameOrFirmSuggestions= async (nameOrFirm) => {
+  return await new Promise((resolve, reject) => {
+    return getConnection(async (connection) => {
+      connection.query("select specilization from specializations WHERE specilization LIKE ?" +
+      " UNION select CONCAT(first_name,' ', last_name ) as name from users where CONCAT(first_name, ' ', last_name) LIKE ?",
+      [nameOrFirm,nameOrFirm],
+       (error, result) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+      });
+    });
+  });
+};
+
+exports.getLocationSuggestions= async (nameOrFirm) => {
+  return await new Promise((resolve, reject) => {
+    return getConnection(async (connection) => {
+      connection.query("select location from users where location LIKE '%?%'",
+      [nameOrFirm],
+       (error, result) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+      });
+    });
+  });
+};
+
 exports.getSearchResults = async ({
   specializations,
   languages,

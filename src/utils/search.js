@@ -1,3 +1,9 @@
+const axios = require('axios');
+
+if (process.env.NODE_ENV !== 'prod') {
+  require('dotenv').config();
+}
+
 exports.separateSpecializations = (specializations) => {
   if (!specializations || specializations.length === 0) {
     return null;
@@ -22,4 +28,10 @@ exports.getIntArrayFromString = (string) => {
   }
   const stringArray = string.split(',');
   return stringArray.map((element) => parseInt(element));
+};
+
+exports.getPlaces = async (location) => {
+  return await axios.get(
+    `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${location}&key=${process.env.PLACES_API_KEY}&components=country:de`
+  );
 };
