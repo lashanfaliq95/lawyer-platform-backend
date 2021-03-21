@@ -29,14 +29,16 @@ exports.filterLawyers = async (req, res) => {
       languages,
       nameOrFirm,
       location,
+      page,
     } = qs.parse(req.query);
-
+    
     const languageArray = utils.getIntArrayFromString(languages);
     const specializationsArray = utils.getIntArrayFromString(specializations);
     const result = await dao.getSearchResults({
       specializations: specializationsArray,
       languages: languageArray,
       nameOrFirm,
+      page,
     });
     const updatedResult =
       result &&

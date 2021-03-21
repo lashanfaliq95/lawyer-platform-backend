@@ -46,12 +46,22 @@ const getLikeStatement = ({ nameOrFirm }) => {
   return true;
 };
 
-exports.createSearchQuery = ({ specializations, languages, nameOrFirm }) => {
+const getLimitStatement= (page=0) => {
+  const startRecord=(page-1)*20;
+  const uptoRecord=(page)*20;
+    return mysql.format(
+      " LIMIT ?, ? ",
+      [startRecord,uptoRecord]
+    );  
+};
+
+exports.createSearchQuery = ({ specializations, languages, nameOrFirm, page }) => {
   const selectUsersStatement =
     "SELECT DISTINCT id, CONCAT(first_name,' ', last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, latitude, longitude, specializationIds FROM users"
     +" left join (select user_id, group_concat(specilization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id";
   const joinStatement = getJoinQuery({ specializations, languages });
   const likeStatement = getLikeStatement({ nameOrFirm });
-
-  return `${selectUsersStatement} ${joinStatement} ${likeStatement};`;
+  const limitStatement=getLimitStatement(page);
+  
+  return `${selectUsersStatement} ${joinStatement} ${likeStatement} ${limitStatement};`;
 };

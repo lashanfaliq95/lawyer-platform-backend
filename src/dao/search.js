@@ -62,11 +62,13 @@ exports.getSearchResults = async ({
   specializations,
   languages,
   nameOrFirm,
+  page,
 }) => {
   const searchQuery = queryHelper.createSearchQuery({
     specializations,
     languages,
     nameOrFirm,
+    page,
   });
   return await new Promise((resolve, reject) => {
     return getConnection(async (connection) => {
