@@ -18,12 +18,12 @@ const getJoinQuery = ({ specializations, languages }) => {
 
     whereConditions =
       whereConditions +
-      mysql.format(inArray, ['specilization_id', specializations]);
+      mysql.format(inArray, ['specialization_id', specializations]);
   }
   if (languages && languages.length > 0) {
     joinStatement =
       joinStatement +
-      mysql.format(leftJoin, [
+      mysql.format(leftJoin, [  
         'user_languages',
         'users.id',
         'user_languages.user_id',
@@ -58,7 +58,7 @@ const getLimitStatement= (page=0) => {
 exports.createSearchQuery = ({ specializations, languages, nameOrFirm, page }) => {
   const selectUsersStatement =
     "SELECT DISTINCT id, CONCAT(first_name,' ', last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, latitude, longitude, specializationIds FROM users"
-    +" left join (select user_id, group_concat(specilization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id";
+    +" left join (select user_id, group_concat(specialization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id";
   const joinStatement = getJoinQuery({ specializations, languages });
   const likeStatement = getLikeStatement({ nameOrFirm });
   const limitStatement=getLimitStatement(page);

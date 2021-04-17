@@ -62,6 +62,18 @@ exports.getUser = async (req, res) => {
   }
 };
 
+exports.getLawyer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await userDao.getLawyer(id);
+    if (result) {
+      res.status(200).send(result);
+    }
+  } catch (error) {
+    res.status(500).send({ message: 'Something went wrong.' });
+  }
+};
+
 exports.getLawyers = async (req, res) => {
   try {
     const result = await userDao.getLawyers();

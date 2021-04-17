@@ -75,6 +75,26 @@ exports.registerUser = async ({
     });
   });
 };
+``
+exports.getLawyer = async (id) => {
+  return await new Promise((resolve, reject) => {
+    return getConnection(async (connection) => {
+      connection.query(
+        "SELECT DISTINCT id, CONCAT(first_name,' ', last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, fax, gender, latitude, longitude, specializationIds, languageIds FROM users"
+    +" left join (select user_id, group_concat(specialization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id"
+    +" left join (select user_id, group_concat(language_id) as languageIds from user_languages group by user_id) b on users.id=b.user_id"
+    +" WHERE role_id=2 AND users.id=?",
+        [id],
+        (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+        }
+      );
+    });
+  });
+};
 
 exports.getLawyers = async () => {
   return await new Promise((resolve, reject) => {
