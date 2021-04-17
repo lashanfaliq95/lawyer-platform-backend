@@ -2,7 +2,7 @@
   "name": "lawyer-platform-bff",
   "version": "0.0.0",
   "private": true,
-  "main": "src/app.js",
+  "main": "app/src/app.js",
   "scripts": {
     "start": "npm install && NODE_ENV=dev ./bin/www",
     "start:dev": "NODE_ENV=dev nodemon ./bin/www"

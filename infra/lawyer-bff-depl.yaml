@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lawyer-bff-depl 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lawyer-bff
+  template:
+    metadata:
+      labels:
+        app: lawyer-bff
+    spec:
+      containers:
+      - name: lawyer-bff
+        image: lash12342/lawyer-bff 
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
