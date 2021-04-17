@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'prod') {
 
 var whitelist = [
   'http://localhost:3000',
-  'http://lawyer-platform.s3-website.eu-central-1.amazonaws.com/',
+  'http://avoplan.s3-website.us-east-2.amazonaws.com/',
 ];
 
 var corsOptionsDelegate = function (req, callback) {
@@ -38,6 +38,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('*', cors(corsOptionsDelegate));
+app.use('/', authRouter);
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/search', searchRouter);
