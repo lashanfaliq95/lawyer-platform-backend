@@ -31,7 +31,7 @@ exports.getNameOrFirmSuggestions= async (nameOrFirm) => {
   return await new Promise((resolve, reject) => {
     return getConnection(async (connection) => {
       connection.query("select specialization from specializations WHERE specialization LIKE ?" +
-      " UNION select CONCAT(first_name,' ', last_name ) as name from users where CONCAT(first_name, ' ', last_name) LIKE ?",
+      " UNION select CONCAT(first_name,' ', last_name ) as name from users where role_id=2 AND CONCAT(first_name, ' ', last_name) LIKE ?",
       [nameOrFirm,nameOrFirm],
        (error, result) => {
         if (error) {

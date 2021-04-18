@@ -62,7 +62,9 @@ exports.getSuggestions = async (req, res) => {
       if (result && result.length > 0) {
         const updatedResult = [];
         for(let i=0;i<6;i++){
+          if(result[i]){
           updatedResult.push(result[i].name|| result[i].specialization)
+          }
         }
         res.status(200).send(updatedResult);
       } else {
