@@ -1,4 +1,5 @@
 const axios = require('axios');
+var removeDiacritics = require('diacritics').remove;
 
 if (process.env.NODE_ENV !== 'prod') {
   require('dotenv').config();
@@ -32,6 +33,6 @@ exports.getIntArrayFromString = (string) => {
 
 exports.getPlaces = async (location) => {
   return await axios.get(
-    `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${location}&key=${process.env.PLACES_API_KEY}&components=country:de`
+    `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${removeDiacritics(location)}&key=${process.env.PLACES_API_KEY}&components=country:de`
   );
 };
