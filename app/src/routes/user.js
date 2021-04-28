@@ -5,13 +5,23 @@ const authenticateJWT = require('../middleware/auth');
 
 router.post('/',  userController.createUser);
 
+router.get(
+  '/:id/appointments',
+  userController.getUserAppointments
+);
+
 router.get('/lawyers', userController.getLawyers);
 
 router.get('/lawyers/:id', userController.getLawyer);
 
 router.get(
-  '/lawyers/availability/:id',
+  '/lawyers/:id/availability',
   userController.getLawyerAvailability
+);
+
+router.get(
+  '/lawyers/:id/appointments',
+  userController.getLawyerAppointments
 );
 
 module.exports = router;

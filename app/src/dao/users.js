@@ -167,3 +167,37 @@ exports.savePasswordResetToken = async ({
     });
   });
 };
+
+exports.getUserAppointments= async ({ id, password }) => {
+  return await new Promise((resolve, reject) => {
+    return getConnection(async (connection) => {
+      connection.query(
+        'UPDATE users SET password=? where id = ?',
+        [password, id],
+        (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+        }
+      );
+    });
+  });
+};
+
+exports.getLawyerAppointments= async ({ id, password }) => {
+  return await new Promise((resolve, reject) => {
+    return getConnection(async (connection) => {
+      connection.query(
+        'UPDATE users SET password=? where id = ?',
+        [password, id],
+        (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+        }
+      );
+    });
+  });
+};

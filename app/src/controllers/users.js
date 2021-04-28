@@ -2,6 +2,7 @@ const userDao = require('../dao/users');
 const authUtil = require('../utils/auth');
 const dateUtil = require('../utils/date');
 const userUtil = require('../utils/user');
+const { appointments } = require('../mocks');
 
 exports.createUser = async (req, res) => {
   const {
@@ -131,6 +132,50 @@ exports.updateUser = async (req, res) => {
       const result = await userDao.deleteUser({ id });
       if (result) {
         res.status(200).send({ data: userResponse });
+      }
+    } catch (error) {
+      res.status(500).send({ message: 'Something went wrong.' });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid parameters' });
+  }
+};
+
+exports.getUserAppointments = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.query;
+  if (id) {
+    try {
+      // TODO - Implement once the appointment structure is finalized
+      // status 0 for active appointments, 1 for completed or past
+      // const result = await userDao.getUserAppointments();
+      let result;
+      if (status === '0') {
+        result = appointments;
+      } else {
+        result = appointments.slice(0, 5);
+      }
+      if (result) {
+        res.status(200).send({ data: result });
+      }
+    } catch (error) {
+      res.status(500).send({ message: 'Something went wrong.' });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid parameters' });
+  }
+};
+
+exports.getLawyerAppointments = async (req, res) => {
+  const { id } = req.params;
+  if (id) {
+    try {
+      // TODO - Implement once the appointment structure is finalized
+      // status 0 for active appointments, 1 for completed or past
+      // const result = await userDao.getUsers();
+      const result = appointments.slice(0, 5);
+      if (result) {
+        res.status(200).send({ data: result });
       }
     } catch (error) {
       res.status(500).send({ message: 'Something went wrong.' });
