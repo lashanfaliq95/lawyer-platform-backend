@@ -1,6 +1,6 @@
 INSERT INTO roles(role) values('user'),('lawyer'),('admin');
 
-INSERT INTO specialization_types(name) values('lawyer'),('notary');
+INSERT INTO expert_types(name) values('notary'),('tax_consultants'),('consultants'),('law_specialization'),('patent_lawyers');
 
 INSERT INTO specializations(specilization, type) values
 ('Agrarrecht', 1),

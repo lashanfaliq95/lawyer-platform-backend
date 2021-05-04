@@ -1,12 +1,6 @@
 CREATE DATABASE advoplan;
 USE advoplan;
 
-    CREATE TABLE specialization_types(
-        id INT NOT NULL AUTO_INCREMENT,
-        name VARCHAR(255) NOT NULL,
-        PRIMARY KEY(id)
-    );
-
     CREATE TABLE specializations(
         id INT NOT NULL  AUTO_INCREMENT, 
         specialization VARCHAR(255) NOT NULL,
@@ -15,7 +9,12 @@ USE advoplan;
         PRIMARY KEY (id)
     );
 
-  
+    CREATE TABLE expert_types(
+        id INT NOT NULL  AUTO_INCREMENT, 
+        name VARCHAR(255) NOT NULL,
+        PRIMARY KEY (id)
+    );
+
    CREATE TABLE time_slot(
         id INT NOT NULL auto_increment,
         time_range VARCHAR(100) NOT NULL,
@@ -45,7 +44,8 @@ USE advoplan;
         password VARCHAR(255) NOT NULL,
         firm VARCHAR(255),
         role_id INT NOT NULL,
-        gender INT NOT NULL,
+        expert_type INT,
+        gender INT,
         image_url VARCHAR(255),
         reset_token VARCHAR(255),
         reset_token_expiration VARCHAR(255),
@@ -54,6 +54,7 @@ USE advoplan;
         country VARCHAR(255),
         zip_code INT,
         FOREIGN KEY (role_id) REFERENCES roles(id),
+        FOREIGN KEY (expert_type) REFERENCES expert_types(id),
         PRIMARY KEY (id)
     );
 
@@ -100,8 +101,6 @@ USE advoplan;
         FOREIGN KEY (lawyer_id) REFERENCES users(id),
         PRIMARY KEY(lawyer_id,time_slot,date)
     );
-
- 
 
     CREATE TABLE auth(
         id INT PRIMARY key auto_increment, 
