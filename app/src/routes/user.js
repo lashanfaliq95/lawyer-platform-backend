@@ -5,6 +5,8 @@ const authenticateJWT = require('../middleware/auth');
 
 router.post('/',  userController.createUser);
 
+router.delete('/:id',  userController.deleteUser);
+
 router.get(
   '/:id/appointments',
   userController.getUserAppointments

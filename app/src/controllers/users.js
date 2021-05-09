@@ -110,12 +110,12 @@ exports.getLawyerAvailability = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
   if (id) {
     try {
-      const result = await userDao.deleteUser({ id });
+      const result = await userDao.deleteUser(id);
       if (result) {
-        res.status(200).send({ data: userResponse });
+        res.status(200).send({ message: 'User deleted successfully' });
       }
     } catch (error) {
       res.status(500).send({ message: 'Something went wrong.' });

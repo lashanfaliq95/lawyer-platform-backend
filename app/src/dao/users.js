@@ -201,3 +201,20 @@ exports.getLawyerAppointments = async ({ id, password }) => {
     });
   });
 };
+
+exports.deleteUser=async (id) => {
+  return await new Promise((resolve, reject) => {
+    return getConnection(async (connection) => {
+      connection.query(
+        'DELETE FROM users WHERE id=?',
+        [id],
+        (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+        }
+      );
+    });
+  });
+};
