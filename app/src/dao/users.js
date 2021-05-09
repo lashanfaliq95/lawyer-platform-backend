@@ -17,6 +17,23 @@ exports.getPasswordOfUser = async ({ email }) => {
   });
 };
 
+exports.getPasswordOfUserFromId = async (id) => {
+  return await new Promise((resolve, reject) => {
+    return getConnection(async (connection) => {
+      connection.query(
+        'SELECT password FROM users WHERE id=?',
+        [id],
+        (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+        }
+      );
+    });
+  });
+};
+
 exports.getUserIdFromEmail = async ({ email }) => {
   return await new Promise((resolve, reject) => {
     return getConnection(async (connection) => {
@@ -130,7 +147,7 @@ exports.getLawyerAvailability = async ({ id, startDate }) => {
   });
 };
 
-exports.saveUserPassword = async ({ id, password }) => {
+exports.saveUserPassword = async (id, password) => {
   return await new Promise((resolve, reject) => {
     return getConnection(async (connection) => {
       connection.query(
@@ -208,6 +225,40 @@ exports.deleteUser=async (id) => {
       connection.query(
         'DELETE FROM users WHERE id=?',
         [id],
+        (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+        }
+      );
+    });
+  });
+};
+
+exports.updatePassword=async (id) => {
+  return await new Promise((resolve, reject) => {
+    return getConnection(async (connection) => {
+      connection.query(
+        'DELETE FROM users WHERE id=?',
+        [id],
+        (error, result) => {
+          if (error) {
+            reject(error);
+          }
+          resolve(result);
+        }
+      );
+    });
+  });
+};
+
+exports.updateUser = async ({id, firstName, lastName, email, phoneNumber}) => {
+  return await new Promise((resolve, reject) => {
+    return getConnection(async (connection) => {
+      connection.query(
+        'UPDATE users SET first_name=?, last_name=?, email=?, mobile_phone=? WHERE id = ?',
+        [firstName,lastName,email,phoneNumber, id],
         (error, result) => {
           if (error) {
             reject(error);

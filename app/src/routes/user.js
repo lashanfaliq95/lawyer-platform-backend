@@ -7,6 +7,10 @@ router.post('/',  userController.createUser);
 
 router.delete('/:id',  userController.deleteUser);
 
+router.put('/:id',userController.updateUser);
+
+router.put('/:id/password',userController.updateUserPassword);
+
 router.get(
   '/:id/appointments',
   userController.getUserAppointments
