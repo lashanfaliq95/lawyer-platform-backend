@@ -4,8 +4,8 @@
   "private": true,
   "main": "app/src/app.js",
   "scripts": {
-    "start": "cross-env npm install && NODE_ENV=dev ./bin/www",
-    "start:dev": "cross-env NODE_ENV=dev nodemon ./bin/www"
+    "start": "cross-env npm install && NODE_ENV=dev ./app/src/app.js",
+    "start:dev": "cross-env NODE_ENV=dev nodemon ./app/src/app.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.3.0",
@@ -23,8 +23,10 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.4.14",
+    "sequelize": "^6.6.2",
     "stringify": "^5.2.0",
     "uuid": "^8.3.1"
   },

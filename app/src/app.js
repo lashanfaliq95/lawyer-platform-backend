@@ -4,9 +4,12 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
+const sequelize = require('./connectors/database');
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const searchRouter = require('./routes/search');
+
+const port = process.env.PORT || '6060';
 
 const app = express();
 
@@ -58,5 +61,18 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   next(err);
 });
+
+sequelize
+  .sync({ force: true })
+  .then((result) => {
+    app.listen(port, () => {
+      console.log(
+        `Connection to database successful. Server is listening at port ${port}`
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 module.exports = app;
