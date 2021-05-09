@@ -8,6 +8,20 @@ const sequelize = require('./connectors/database');
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const searchRouter = require('./routes/search');
+const {
+  Appointment,
+  Auth,
+  ExpertType,
+  Language,
+  LawyerAvailability,
+  Role,
+  Specialization,
+  TimeSlot,
+  User,
+  UserLanguage,
+  UserSpecialization,
+  WeekDay,
+} = require('./models');
 
 const port = process.env.PORT || '6060';
 
