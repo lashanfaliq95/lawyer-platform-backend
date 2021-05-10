@@ -1,16 +1,20 @@
-const Sequelize = require('sequelize');
-
 const sequelize = require('../connectors/database');
+const User = require('./user');
+const Language = require('./language');
 
-const UserLanguages = sequelize.define('user_languages', {
-  userId: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  languageId: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-  },
+const UserLanguage = sequelize.define(
+  'user_languages',
+  {},
+  { timestamps: false }
+);
+
+User.belongsToMany(Language, {
+  through: UserLanguage,
+  foreignKey: 'user_id',
+});
+Language.belongsToMany(User, {
+  through: UserLanguage,
+  foreignKey: 'language_id',
 });
 
-module.exports = UserLanguages;
+module.exports = UserLanguage;
