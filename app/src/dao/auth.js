@@ -1,70 +1,20 @@
-const getConnection = require('../connectors/mysqlConnector');
+const { Auth } = require('../models/index');
 
-exports.setRefreshToken = async ({ refreshToken }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'INSERT INTO auth (refresh_token) values(?)',
-        [refreshToken],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
+exports.setRefreshToken = ({ refreshToken }) => {
+  return Auth.create({ refresh_token: refreshToken });
+};
+
+exports.getRefreshToken = ({ refreshToken }) => {
+  return Auth.findAll({ where: { refresh_token: refreshToken } });
+};
+
+exports.getResetTokenExpiration = ({ token }) => {
+  return Auth.findAll({
+    attributes: ['id', 'reset_token_expiration', 'email'],
+    where: { reset_token: token },
   });
 };
 
-exports.getRefreshToken = async ({ refreshToken }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'SELECT * FROM auth where refresh_token = ?',
-        [refreshToken],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
-};
-
-
-exports.getResetTokenExpiration = async ({ token }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'SELECT id, reset_token_expiration, email FROM users where reset_token = ?',
-        [token],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
-};
-
-exports.deleteRefreshToken = async ({ refreshToken }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'DELETE FROM auth where refresh_token = ?',
-        [refreshToken],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
+exports.deleteRefreshToken = ({ refreshToken }) => {
+  return Auth.destroy({ where: { refresh_token: refreshToken } });
 };

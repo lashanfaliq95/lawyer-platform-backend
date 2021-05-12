@@ -15,7 +15,7 @@ const LawyerAvailability = sequelize.define(
       defaultValue: true,
     },
   },
-  { timestamps: false }
+  { timestamps: false, freezeTableName: true }
 );
 
 // foreign keys and primary key to be added

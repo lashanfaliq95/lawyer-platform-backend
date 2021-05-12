@@ -1,57 +1,24 @@
-const getConnection = require('../connectors/mysqlConnector');
+const { QueryTypes /**Op */ } = require('sequelize');
 
-exports.getPasswordOfUser = async ({ email }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'SELECT id, password, role_id AS roleId FROM users WHERE email=?',
-        [email],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
+const sequelize = require('../connectors/database');
+const { User /**LawyerAvailability */ } = require('../models/index');
+
+exports.getPasswordOfUser = ({ email }) => {
+  return User.findAll({
+    attributes: ['id', 'password', ['role_id', 'roleId']],
+    where: { email },
   });
 };
 
-exports.getUserIdFromEmail = async ({ email }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'SELECT id FROM users WHERE email=?',
-        [email],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
+exports.getUserIdFromEmail = ({ email }) => {
+  return User.findAll({ attributes: ['id'], where: { email } });
 };
 
-exports.getIdOfUser = async ({ email }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'SELECT id FROM users WHERE email=?',
-        [email],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
+exports.getIdOfUser = ({ email }) => {
+  return User.findAll({ attributes: ['id'], where: { email } });
 };
 
-exports.registerUser = async ({
+exports.registerUser = ({
   id,
   firstName,
   lastName,
@@ -60,144 +27,128 @@ exports.registerUser = async ({
   password,
   roleId,
 }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'INSERT INTO users(id, first_name, last_name, email, mobile_phone, password, role_id, gender) VALUES(?, ? , ?, ?, ?, ?, ?, ?)',
-        [id, firstName, lastName, email, mobilePhone, password, roleId, 0],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
-};
-``;
-exports.getLawyer = async (id) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        "SELECT DISTINCT id, CONCAT(first_name,' ', last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, fax, gender, latitude, longitude, specializationIds, languageIds FROM users" +
-          ' left join (select user_id, group_concat(specialization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id' +
-          ' left join (select user_id, group_concat(language_id) as languageIds from user_languages group by user_id) b on users.id=b.user_id' +
-          ' WHERE role_id=2 AND users.id=?',
-        [id],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
+  return User.create({
+    id,
+    first_name: firstName,
+    last_name: lastName,
+    email,
+    mobile_phone: mobilePhone,
+    password,
+    role_id: roleId,
+    gender: 0,
   });
 };
 
-exports.getLawyers = async () => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'SELECT id, CONCAT(first_name," ", last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, latitude, longitude FROM users WHERE role_id=2',
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
+exports.getLawyer = (id) => {
+  return sequelize.query(
+    'SELECT DISTINCT id, CONCAT(first_name, " ", last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, fax, gender, latitude, longitude, specializationIds, languageIds FROM users' +
+      ' left join (select user_id, group_concat(specialization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id' +
+      ' left join (select user_id, group_concat(language_id) as languageIds from user_languages group by user_id) b on users.id=b.user_id' +
+      ' WHERE role_id=? AND users.id=?',
+    { replacements: [2, id], type: QueryTypes.SELECT }
+  );
+
+  // return await new Promise((resolve, reject) => {
+  //   return getConnection(async (connection) => {
+  //     connection.query(
+  //       "SELECT DISTINCT id, CONCAT(first_name,' ', last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, fax, gender, latitude, longitude, specializationIds, languageIds FROM users" +
+  //         ' left join (select user_id, group_concat(specialization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id' +
+  //         ' left join (select user_id, group_concat(language_id) as languageIds from user_languages group by user_id) b on users.id=b.user_id' +
+  //         ' WHERE role_id=2 AND users.id=?',
+  //       [id],
+  //       (error, result) => {
+  //         if (error) {
+  //           reject(error);
+  //         }
+  //         resolve(result);
+  //       }
+  //     );
+  //   });
+  // });
+};
+
+exports.getLawyers = () => {
+  return User.findAll({
+    attributes: [
+      'id',
+      [
+        sequelize.fn('CONCAT', col('first_name'), ' ', col('last_name')),
+        'name',
+      ],
+      'email',
+      'address',
+      'firm',
+      ['image_url', 'imgUrl'],
+      ['mobile_phone', 'mobilePhone'],
+      'latitude',
+      'longitude',
+    ],
+    where: { role_id: 2 },
   });
 };
 
-exports.getLawyerAvailability = async ({ id, startDate }) => {
-  console.log(id, startDate);
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'SELECT lawyer_id AS id, time_slot AS timeSlot, date, day_of_week as dayOfWeek FROM lawyer_availability WHERE available=true AND lawyer_id=? AND date > ? AND date <= DATE_ADD(?,INTERVAL 5 DAY)',
-        [id, startDate, startDate],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
+exports.getLawyerAvailability = ({ id, startDate }) => {
+  // Same as below raw query, but not sure if dates are correct
+
+  // return LawyerAvailability.findAll({
+  //   attributes: [
+  //     ['lawyer_id', 'id'],
+  //     ['time_slot', 'timeSlot'],
+  //     ['day_of_week', 'dayOfWeek'],
+  //     'date',
+  //   ],
+  //   where: {
+  //     available: true,
+  //     lawyer_id: id,
+  //     date: {
+  //       [Op.gt]: startDate,
+  //       [Op.lte]: new Date(
+  //         new Date(startDate).getTime() + 5 * 24 * 60 * 60 * 1000
+  //       ),
+  //     },
+  //   },
+  // });
+
+  return sequelize.query(
+    'SELECT lawyer_id AS id, time_slot AS timeSlot, date, day_of_week as dayOfWeek ' +
+      'FROM lawyer_availability WHERE available = true AND lawyer_id = ? AND ' +
+      'date > ? AND date <= DATE_ADD(?, INTERVAL 5 DAY)',
+    { replacements: [id, startDate, startDate], type: QueryTypes.SELECT }
+  );
+
+  // keeping for reference to check if above raw query is correct, must be deleted before merging to master branch
+
+  // return await new Promise((resolve, reject) => {
+  //   return getConnection(async (connection) => {
+  //     connection.query(
+  //       'SELECT lawyer_id AS id, time_slot AS timeSlot, date, day_of_week as dayOfWeek FROM lawyer_availability WHERE available=true AND lawyer_id=? AND date > ? AND date <= DATE_ADD(?,INTERVAL 5 DAY)',
+  //       [id, startDate, startDate],
+  //       (error, result) => {
+  //         if (error) {
+  //           reject(error);
+  //         }
+  //         resolve(result);
+  //       }
+  //     );
+  //   });
+  // });
 };
 
-exports.saveUserPassword = async ({ id, password }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'UPDATE users SET password=? where id = ?',
-        [password, id],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
+exports.saveUserPassword = ({ id, password }) => {
+  return User.update({ password }, { where: { id } });
 };
 
-exports.savePasswordResetToken = async ({
-  id,
-  resetToken,
-  expirationTimeString,
-}) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'UPDATE users SET reset_token=?, reset_token_expiration=? where id = ?',
-        [resetToken, expirationTimeString, id],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
+exports.savePasswordResetToken = ({ id, resetToken, expirationTimeString }) => {
+  return User.update(
+    { reset_token: resetToken, reset_token_expiration: expirationTimeString },
+    { where: { id } }
+  );
 };
 
-exports.getUserAppointments = async ({ id, password }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'UPDATE users SET password=? where id = ?',
-        [password, id],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
+exports.getUserAppointments = ({ id, password }) => {
+  return User.update({ password }, { where: { id } });
 };
 
-exports.getLawyerAppointments = async ({ id, password }) => {
-  return await new Promise((resolve, reject) => {
-    return getConnection(async (connection) => {
-      connection.query(
-        'UPDATE users SET password=? where id = ?',
-        [password, id],
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-          resolve(result);
-        }
-      );
-    });
-  });
+exports.getLawyerAppointments = ({ id, password }) => {
+  return User.update({ password }, { where: { id } });
 };

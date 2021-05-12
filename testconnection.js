@@ -1,18 +1,5 @@
-const getConnection = require('../connectors/mysqlConnector');
+const { User } = require('./app/src/models/index');
 
 (async () => {
-    return await new Promise((resolve, reject) => {
-      return getConnection(async (connection) => {
-        connection.query(
-          'SELECT * FROM users',
-          (error, result) => {
-            if (error) {
-              reject(error);
-            }
-            resolve(result);
-          }
-        );
-      });
-    });
+  return User.findAll();
 })();
-
