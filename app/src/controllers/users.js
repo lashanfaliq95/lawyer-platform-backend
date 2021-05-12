@@ -110,12 +110,12 @@ exports.getLawyerAvailability = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
   if (id) {
     try {
-      const result = await userDao.deleteUser({ id });
+      const result = await userDao.deleteUser(id);
       if (result) {
-        res.status(200).send({ data: userResponse });
+        res.status(200).send({ message: 'User deleted successfully' });
       }
     } catch (error) {
       res.status(500).send({ message: 'Something went wrong.' });
@@ -126,14 +126,58 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-  const { id } = req.body;
-  if (id) {
+  const { id } = req.params;
+  const { firstName, lastName, email, phoneNumber } = req.body;
+  if (id && firstName && lastName && email && phoneNumber) {
     try {
-      const result = await userDao.deleteUser({ id });
+      const result = await userDao.updateUser({
+        id,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+      });
       if (result) {
-        res.status(200).send({ data: userResponse });
+        res.status(200).send({ data: result });
       }
     } catch (error) {
+      console.log(error)
+      res.status(500).send({ message: 'Something went wrong.' });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid parameters' });
+  }
+};
+
+exports.updateUserPassword = async (req, res) => {
+  const { id } = req.params;
+  const { currentPassword, newPassword } = req.body;
+  if (id && currentPassword && newPassword) {
+    try {
+      let result = await userDao.getPasswordOfUserFromId(id);
+      if (result && result.length !== 0) {
+        const isUserAuthenticated = await authUtil.comparePassword(
+          currentPassword,
+          result[0].password
+        );
+        if (isUserAuthenticated) {
+          const encryptedPassword = await authUtil.encryptPassword(newPassword);
+          result = await userDao.saveUserPassword(id, encryptedPassword);
+          if (result) {
+            res
+              .status(200)
+              .send({ message: 'Successfully updated user password' });
+          }
+        } else {
+          res.status(400).json({
+            error: 'Current password incorrect',
+          });
+        }
+      } else {
+        res.status(500).send({ message: 'Something went wrong.' });
+      }
+    } catch (error) {
+      console.log(error);
       res.status(500).send({ message: 'Something went wrong.' });
     }
   } else {

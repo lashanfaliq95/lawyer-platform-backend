@@ -61,7 +61,7 @@ USE advoplan;
     CREATE TABLE user_specializations(
         user_id VARCHAR(255) NOT NULL,
         specialization_id INT NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY (specialization_id) REFERENCES specializations(id),
         PRIMARY KEY(user_id,specialization_id)
     );
@@ -69,7 +69,7 @@ USE advoplan;
       CREATE TABLE user_languages(
         user_id VARCHAR(255) NOT NULL,
         language_id INT NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY (language_id) REFERENCES languages(id),
         PRIMARY KEY(user_id,language_id)
     );
@@ -81,8 +81,8 @@ USE advoplan;
         time_slot INT NOT NULL,
         date DATE NOT NULL,
         FOREIGN KEY (time_slot) REFERENCES time_slot(id),
-        FOREIGN KEY (lawyer_id) REFERENCES users(id),
-        FOREIGN KEY (user_id) REFERENCES users(id)
+        FOREIGN KEY (lawyer_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     );
 
     CREATE TABLE week_days(
@@ -98,7 +98,7 @@ USE advoplan;
         available BOOLEAN DEFAULT TRUE,
         FOREIGN KEY (day_of_week) REFERENCES week_days(id),
         FOREIGN KEY (time_slot) REFERENCES time_slot(id),
-        FOREIGN KEY (lawyer_id) REFERENCES users(id),
+        FOREIGN KEY (lawyer_id) REFERENCES users(id) ON DELETE CASCADE,
         PRIMARY KEY(lawyer_id,time_slot,date)
     );
 

@@ -152,3 +152,29 @@ exports.getUserAppointments = ({ id, password }) => {
 exports.getLawyerAppointments = ({ id, password }) => {
   return User.update({ password }, { where: { id } });
 };
+
+exports.deleteUser = async (id) => {
+  return User.destroy({ where: { id } });
+};
+
+exports.updatePassword = async (id) => {
+  return User.destroy({ where: { id } });
+};
+
+exports.updateUser = async ({
+  id,
+  firstName,
+  lastName,
+  email,
+  phoneNumber,
+}) => {
+  return User.update(
+    {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      mobile_phone: phoneNumber,
+    },
+    { where: { id } }
+  );
+};
