@@ -141,7 +141,6 @@ exports.updateUser = async (req, res) => {
         res.status(200).send({ data: result });
       }
     } catch (error) {
-      console.log(error)
       res.status(500).send({ message: 'Something went wrong.' });
     }
   } else {
@@ -221,6 +220,21 @@ exports.getLawyerAppointments = async (req, res) => {
       if (result) {
         res.status(200).send({ data: result });
       }
+    } catch (error) {
+      res.status(500).send({ message: 'Something went wrong.' });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid parameters' });
+  }
+};
+
+exports.createUserMessage = async (req, res) => {
+  const { id } = req.params;
+  const { message } = req.body;
+  if (id && message) {
+    try {
+      await userDao.saveUserMessage({ id, message });
+      res.status(200).send({ message: 'Successfully updated user password' });
     } catch (error) {
       res.status(500).send({ message: 'Something went wrong.' });
     }

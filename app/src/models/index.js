@@ -10,6 +10,7 @@ const User = require('./user');
 const UserLanguage = require('./userLanguage');
 const UserSpecialization = require('./userSpecialization');
 const WeekDay = require('./weekDay');
+const userMessages = require('./userMessages');
 
 module.exports = {
   Appointment,
@@ -24,4 +25,5 @@ module.exports = {
   UserLanguage,
   UserSpecialization,
   WeekDay,
+  userMessages,
 };
