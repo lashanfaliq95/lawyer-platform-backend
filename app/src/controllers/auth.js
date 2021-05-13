@@ -134,7 +134,7 @@ exports.resetUserPassword = async (req, res) => {
         id,
         password: encryptedPassword,
       });
-       await emailHelper.sendPasswordResetSuccessEmail({
+      await emailHelper.sendPasswordResetSuccessEmail({
         to: email,
       });
 

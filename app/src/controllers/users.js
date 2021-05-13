@@ -141,7 +141,6 @@ exports.updateUser = async (req, res) => {
         res.status(200).send({ data: result });
       }
     } catch (error) {
-      console.log(error)
       res.status(500).send({ message: 'Something went wrong.' });
     }
   } else {
@@ -154,7 +153,7 @@ exports.updateUserPassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
   if (id && currentPassword && newPassword) {
     try {
-      let result = await userDao.getPasswordOfUserFromId(id);
+      let result = await userDao.getPasswordOfUserFromId({ id });
       if (result && result.length !== 0) {
         const isUserAuthenticated = await authUtil.comparePassword(
           currentPassword,

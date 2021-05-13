@@ -12,6 +12,7 @@ const sequelize = new Sequelize(
     dialect: 'mysql',
     host: process.env.MYSQL_HOST,
     dialectOptions: { decimalNumbers: true },
+    logging: false,
   }
 );
 
