@@ -8,7 +8,6 @@
     "start:dev": "cross-env NODE_ENV=dev nodemon ./app/src/app"
   },
   "dependencies": {
-    "@sendgrid/mail": "^7.3.0",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "cookie-parser": "~1.4.4",
@@ -25,6 +24,7 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.2.5",
     "node-fetch": "^2.6.1",
+    "node-mailjet": "^3.3.1",
     "nodemailer": "^6.4.14",
     "sequelize": "^6.6.2",
     "stringify": "^5.2.0",

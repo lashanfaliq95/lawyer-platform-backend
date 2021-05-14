@@ -1,4 +1,4 @@
-const { Auth } = require('../models/index');
+const { Auth, User } = require('../models/index');
 
 exports.setRefreshToken = ({ refreshToken }) => {
   return Auth.create({ refresh_token: refreshToken });
@@ -9,7 +9,7 @@ exports.getRefreshToken = ({ refreshToken }) => {
 };
 
 exports.getResetTokenExpiration = ({ token }) => {
-  return Auth.findAll({
+  return User.findAll({
     attributes: ['id', 'reset_token_expiration', 'email'],
     where: { reset_token: token },
   });
