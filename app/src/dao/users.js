@@ -10,6 +10,13 @@ exports.getPasswordOfUser = ({ email }) => {
   });
 };
 
+exports.getPasswordOfUserFromId = ({ id }) => {
+  return User.findAll({
+    attributes: ['password'],
+    where: { id },
+  });
+};
+
 exports.getUserIdFromEmail = ({ email }) => {
   return User.findAll({ attributes: ['id'], where: { email } });
 };
@@ -134,7 +141,7 @@ exports.getLawyerAvailability = ({ id, startDate }) => {
   // });
 };
 
-exports.saveUserPassword = ({ id, password }) => {
+exports.saveUserPassword = (id, password) => {
   return User.update({ password }, { where: { id } });
 };
 
