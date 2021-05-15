@@ -66,12 +66,20 @@ USE advoplan;
         PRIMARY KEY(user_id,specialization_id)
     );
 
-      CREATE TABLE user_languages(
+    CREATE TABLE user_languages(
         user_id VARCHAR(255) NOT NULL,
         language_id INT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY (language_id) REFERENCES languages(id),
         PRIMARY KEY(user_id,language_id)
+    );
+
+    CREATE TABLE user_messages(
+        id INT AUTO_INCREMENT,
+        user_id VARCHAR(255) NOT NULL,
+        message VARCHAR(255) NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        PRIMARY KEY(id)
     );
 
     CREATE TABLE appointments(

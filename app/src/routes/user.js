@@ -11,6 +11,8 @@ router.put('/:id',userController.updateUser);
 
 router.put('/:id/password',userController.updateUserPassword);
 
+router.post('/:id/message',userController.createUserMessage);
+
 router.get(
   '/:id/appointments',
   userController.getUserAppointments

@@ -21,6 +21,7 @@ const {
   UserLanguage,
   UserSpecialization,
   WeekDay,
+  userMessages,
 } = require('./models');
 
 const port = process.env.PORT || '6060';
