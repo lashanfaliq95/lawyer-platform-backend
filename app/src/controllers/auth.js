@@ -130,13 +130,10 @@ exports.resetUserPassword = async (req, res) => {
     const { id, password, email } = req.body;
     if (id && password) {
       const encryptedPassword = await authUtil.encryptPassword(password);
-      await userDao.saveUserPassword({
-        id,
-        password: encryptedPassword,
-      });
-      await emailHelper.sendPasswordResetSuccessEmail({
-        to: email,
-      });
+      await userDao.saveUserPassword(id, encryptedPassword);
+      // await emailHelper.sendPasswordResetSuccessEmail({
+      //   to: email,
+      // });
 
       res.status(200).json({ message: 'Password Reset success' });
     } else {
