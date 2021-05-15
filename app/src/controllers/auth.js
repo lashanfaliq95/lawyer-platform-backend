@@ -6,7 +6,7 @@ const userDao = require('../dao/users');
 const authUtil = require('../utils/auth');
 const dateUtil = require('../utils/date');
 
-const emailHelper = require('../helper/emailHelper');
+const { sendResetPasswordEmail } = require('../helper/emailHelper');
 
 if (process.env.NODE_ENV !== 'prod') {
   require('dotenv').config();
@@ -109,19 +109,20 @@ exports.forgot = async (req, res) => {
           resetToken,
           expirationTimeString,
         });
-        const emailResult = await emailHelper.sendMail({
-          to: email,
+
+        const emailResult = await sendResetPasswordEmail(email, {
           resetToken,
         });
         res.status(200).json({ data: emailResult });
       } else {
-        res.status(401).json({ message: 'Email not found' });
+        res.status(400).json({ message: 'Email not found' });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error });
     }
   } else {
-    res.status(401).json({ message: 'User name or password not defined.' });
+    res.status(400).json({ message: 'User name or password not defined.' });
   }
 };
 
@@ -159,6 +160,7 @@ exports.getResetToken = async (req, res) => {
       res.status(400).json({ message: 'Token not found' });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error });
   }
 };
