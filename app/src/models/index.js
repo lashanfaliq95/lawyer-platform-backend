@@ -10,7 +10,9 @@ const User = require('./user');
 const UserLanguage = require('./userLanguage');
 const UserSpecialization = require('./userSpecialization');
 const WeekDay = require('./weekDay');
-const userMessages = require('./userMessages');
+const UserMessages = require('./userMessages');
+const TutorialSlot = require('./tutorialSlots');
+const TutorialSlotDefault = require('./tutorialSlotsDefault');
 
 module.exports = {
   Appointment,
@@ -25,5 +27,7 @@ module.exports = {
   UserLanguage,
   UserSpecialization,
   WeekDay,
-  userMessages,
+  UserMessages,
+  TutorialSlot,
+  TutorialSlotDefault,
 };

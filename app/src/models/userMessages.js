@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const sequelize = require('../connectors/database');
 const User = require('./user');
 
-const userMessages = sequelize.define(
+const UserMessages = sequelize.define(
   'user_messages',
   {
     id: {
@@ -20,8 +20,8 @@ const userMessages = sequelize.define(
   { timestamps: false }
 );
 
-userMessages.belongsTo(User, {
-    foreignKey: 'user_id',
+UserMessages.belongsTo(User, {
+  foreignKey: 'user_id',
 });
 
-module.exports = userMessages;
+module.exports = UserMessages;
