@@ -5,15 +5,8 @@ const userUtil = require('../utils/user');
 const { appointments } = require('../mocks');
 
 exports.createUser = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    mobilePhone,
-    email,
-    password,
-    roleId,
-  } = req.body;
-  if ((firstName && lastName && mobilePhone && email && password, roleId)) {
+  const { firstName, lastName, mobilePhone, email, password } = req.body;
+  if (firstName && lastName && mobilePhone && email && password) {
     try {
       const userIds = await userDao.getUserIdFromEmail({ email });
       if (userIds && userIds.length === 0) {
@@ -25,7 +18,58 @@ exports.createUser = async (req, res) => {
           lastName,
           mobilePhone,
           email,
-          roleId,
+          password: encryptedPassword,
+        });
+
+        if (result) {
+          res.status(200).send({
+            data: {
+              id: id,
+              email: email,
+            },
+          });
+        }
+      } else {
+        res.status(400).json({ message: 'User already exists' });
+      }
+    } catch (error) {
+      res.status(500).send({ message: 'Something went wrong.' });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid parameters' });
+  }
+};
+
+exports.createLawyer = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    mobilePhone,
+    email,
+    password,
+    expertType,
+    road,
+    houseNumber,
+    city,
+    zipCode,
+  } = req.body;
+  if (firstName && lastName && mobilePhone && email && password) {
+    try {
+      const userIds = await userDao.getUserIdFromEmail({ email });
+      if (userIds && userIds.length === 0) {
+        const id = authUtil.createUserId();
+        const encryptedPassword = await authUtil.encryptPassword(password);
+        const result = await userDao.registerUser({
+          id,
+          firstName,
+          lastName,
+          mobilePhone,
+          email,
+          expertType,
+          road,
+          houseNumber,
+          city,
+          zipCode,
           password: encryptedPassword,
         });
 

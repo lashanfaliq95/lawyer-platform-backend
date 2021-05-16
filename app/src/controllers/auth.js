@@ -156,6 +156,7 @@ exports.getResetToken = async (req, res) => {
       } else {
         res.status(400).json({ message: 'Reset token has expired' });
       }
+      await authDao.deleteResetToken({ token });
     } else {
       res.status(400).json({ message: 'Token not found' });
     }

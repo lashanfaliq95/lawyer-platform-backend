@@ -1,7 +1,11 @@
 const { QueryTypes /**Op */ } = require('sequelize');
 
 const sequelize = require('../connectors/database');
-const { User, userMessages } = require('../models/index');
+const {
+  User /**LawyerAvailability */,
+  TutorialSlot,
+  TutorialSlotDefault,
+} = require('../models/index');
 
 exports.getPasswordOfUser = ({ email }) => {
   return User.findAll({
@@ -32,7 +36,6 @@ exports.registerUser = ({
   email,
   mobilePhone,
   password,
-  roleId,
 }) => {
   return User.create({
     id,
@@ -41,37 +44,47 @@ exports.registerUser = ({
     email,
     mobile_phone: mobilePhone,
     password,
-    role_id: roleId,
-    gender: 0,
+    role_id: 1,
+  });
+};
+
+exports.registerLawyer = ({
+  id,
+  firstName,
+  lastName,
+  email,
+  mobilePhone,
+  password,
+  expertType,
+  road,
+  houseNumber,
+  city,
+  zipCode,
+}) => {
+  return User.create({
+    id,
+    email,
+    password,
+    road,
+    city,
+    first_name: firstName,
+    last_name: lastName,
+    mobile_phone: mobilePhone,
+    role_id: 2,
+    expert_type: expertType,
+    house_number: houseNumber,
+    zip_code: zipCode,
   });
 };
 
 exports.getLawyer = (id) => {
   return sequelize.query(
-    'SELECT DISTINCT id, CONCAT(first_name, " ", last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, fax, gender, latitude, longitude, specializationIds, languageIds FROM users' +
+    'SELECT DISTINCT id, CONCAT(first_name, " ", last_name ) as name, email, mobile_phone as mobilePhone, road, house_number as houseNumber, zip_code as zipCode, city, firm, image_url as imgUrl, fax, gender, latitude, longitude, specializationIds, languageIds FROM users' +
       ' left join (select user_id, group_concat(specialization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id' +
       ' left join (select user_id, group_concat(language_id) as languageIds from user_languages group by user_id) b on users.id=b.user_id' +
       ' WHERE role_id=? AND users.id=?',
     { replacements: [2, id], type: QueryTypes.SELECT }
   );
-
-  // return await new Promise((resolve, reject) => {
-  //   return getConnection(async (connection) => {
-  //     connection.query(
-  //       "SELECT DISTINCT id, CONCAT(first_name,' ', last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, fax, gender, latitude, longitude, specializationIds, languageIds FROM users" +
-  //         ' left join (select user_id, group_concat(specialization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id' +
-  //         ' left join (select user_id, group_concat(language_id) as languageIds from user_languages group by user_id) b on users.id=b.user_id' +
-  //         ' WHERE role_id=2 AND users.id=?',
-  //       [id],
-  //       (error, result) => {
-  //         if (error) {
-  //           reject(error);
-  //         }
-  //         resolve(result);
-  //       }
-  //     );
-  //   });
-  // });
 };
 
 exports.getLawyers = () => {
@@ -83,7 +96,10 @@ exports.getLawyers = () => {
         'name',
       ],
       'email',
-      'address',
+      'road',
+      ['house_number', 'houseNumber'],
+      'city',
+      ['zip_code', 'zipCode'],
       'firm',
       ['image_url', 'imgUrl'],
       ['mobile_phone', 'mobilePhone'],
@@ -184,11 +200,4 @@ exports.updateUser = async ({
     },
     { where: { id } }
   );
-};
-
-exports.saveUserMessage = ({ id, message }) => {
-  return userMessages.create({
-    user_id: id,
-    message,
-  });
 };

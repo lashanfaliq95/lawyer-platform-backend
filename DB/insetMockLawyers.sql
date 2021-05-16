@@ -2,22 +2,22 @@
     users( id , first_name , last_name , email , mobile_phone, password, firm , address, role_id, image_url, latitude, longitude,gender) 
     VALUES
     (
-        'mock1', 'Dr. Kai', 'Rohs', 'mockEmail1@gmail.com', 'mocknumber', 'password1', 'Anwaltskanzlei Dr. Kai Rohs', 'Graf-Adolf-Strasse 21, 40212, Düsseldorf, Germany', 2, 'http://www.anwaltskanzlei-dr-kai-rohs.de/wp-content/uploads/kai_rohs_quadrat-300x300.png' ,51.218730, 6.781260,1
+        'mock1', 'Dr. Kai', 'Rohs', 'mockEmail1@gmail.com', 'mocknumber', 'password1', 'Anwaltskanzlei Dr. Kai Rohs', 'Graf-Adolf-Strasse 21, 40212, Düsseldorf, Germany', 2, 'http://www.anwaltskanzlei-dr-kai-rohs.de/wp-content/uploads/kai_rohs_quadrat-300x300.png' ,51.218730, 6.781260,'male'
     ),
         (
-        'mock2', 'Katja', 'Jungfermann', 'mockEmail2@gmail.com', 'mocknumber', 'password1', 'CLP Rechtsanwälte', 'Niederkasseler Lohweg 18, 40547, Düsseldorf, Germany', 2, 'https://www.clp-rechtsanwaelte.de/wpdata/wp-content/uploads/2018/01/Katja-Jungfermann_2-1030x683.jpg' ,51.241920, 6.735210,0
+        'mock2', 'Katja', 'Jungfermann', 'mockEmail2@gmail.com', 'mocknumber', 'password1', 'CLP Rechtsanwälte', 'Niederkasseler Lohweg 18, 40547, Düsseldorf, Germany', 2, 'https://www.clp-rechtsanwaelte.de/wpdata/wp-content/uploads/2018/01/Katja-Jungfermann_2-1030x683.jpg' ,51.241920, 6.735210,'male'
     ),
         (
-        'mock3', 'Dr. Rainer', 'Borgelt', 'mockEmail3@gmail.com', 'mocknumber', 'password1', 'Borgelt & Partner Rechtsanwälte mbB', 'Taubenstr. 22, 40479, Düsseldorf, Germany', 2, 'https://i0.wp.com/borgelt.de/wp-content/uploads/2016/09/Rainer_Borgelt.jpg?resize=889%2C1030&ssl=1' , 51.231340, 6.782110,1
+        'mock3', 'Dr. Rainer', 'Borgelt', 'mockEmail3@gmail.com', 'mocknumber', 'password1', 'Borgelt & Partner Rechtsanwälte mbB', 'Taubenstr. 22, 40479, Düsseldorf, Germany', 2, 'https://i0.wp.com/borgelt.de/wp-content/uploads/2016/09/Rainer_Borgelt.jpg?resize=889%2C1030&ssl=1' , 51.231340, 6.782110,'male'
     ),
     (
-      'mock4', 'Anne', 'Lammers', 'mockEmail4', 'mocknumber@gmail.com', 'password1', 'MSH Rechtsanwälte GbR', 'Berliner Allee 56, 40212, Düsseldorf, Germany', 2, 'https://www.msh-rechtsanwaelte.de/wp-content/uploads/2020/07/J.Rolfes.MSH_.AnneLammers200603.125.ret5-A5-SW-1024x658.jpg' ,51.218260, 6.782280,1
+      'mock4', 'Anne', 'Lammers', 'mockEmail4', 'mocknumber@gmail.com', 'password1', 'MSH Rechtsanwälte GbR', 'Berliner Allee 56, 40212, Düsseldorf, Germany', 2, 'https://www.msh-rechtsanwaelte.de/wp-content/uploads/2020/07/J.Rolfes.MSH_.AnneLammers200603.125.ret5-A5-SW-1024x658.jpg' ,51.218260, 6.782280,'female'
    ),
     (
-      'mock5', 'Jan Niklas', 'Schulte', 'mockEmail5', 'mocknumber@gmail.com', 'password1', 'PETERS RechtsanwältePartnerschaftsgesellschaft mbB', 'Burggrafenstrasse 5, 40545, Düsseldorf, Germany', 2, 'https://www.peters-legal.com/wp-content/uploads/peters-ra-schulte-jan-niklas-1.jpg' , 51.232500, 6.759500,1
+      'mock5', 'Jan Niklas', 'Schulte', 'mockEmail5', 'mocknumber@gmail.com', 'password1', 'PETERS RechtsanwältePartnerschaftsgesellschaft mbB', 'Burggrafenstrasse 5, 40545, Düsseldorf, Germany', 2, 'https://www.peters-legal.com/wp-content/uploads/peters-ra-schulte-jan-niklas-1.jpg' , 51.232500, 6.759500,'male'
    ),
     (
-      'mock6', 'Mélanie', 'Clerc', 'mockEmail6', 'mocknumber', 'password1@gmail.com', 'FRANZ RECHTSANWÄLTE Partnerschaftsgesellschaft mbB', 'Kaistrasse 16A, 40221, Düsseldorf, Germanyy', 2, 'https://www.franzlegal.com/files/theme_files/lawyers/teams/FRANZlegalMC2.jpg', 51.262500, 6.8,1
+      'mock6', 'Mélanie', 'Clerc', 'mockEmail6', 'mocknumber', 'password1@gmail.com', 'FRANZ RECHTSANWÄLTE Partnerschaftsgesellschaft mbB', 'Kaistrasse 16A, 40221, Düsseldorf, Germanyy', 2, 'https://www.franzlegal.com/files/theme_files/lawyers/teams/FRANZlegalMC2.jpg', 51.262500, 6.8,'female'
    );
 
 

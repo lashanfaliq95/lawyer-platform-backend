@@ -8,6 +8,8 @@ const sequelize = require('./connectors/database');
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const searchRouter = require('./routes/search');
+const proRouter = require('./routes/pro');
+
 const {
   Appointment,
   Auth,
@@ -60,6 +62,7 @@ app.use('/', authRouter);
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/search', searchRouter);
+app.use('/pro', proRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
