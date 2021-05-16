@@ -1,11 +1,7 @@
 const { QueryTypes /**Op */ } = require('sequelize');
 
 const sequelize = require('../connectors/database');
-const {
-  User /**LawyerAvailability */,
-  TutorialSlot,
-  TutorialSlotDefault,
-} = require('../models/index');
+const { User, UserMessages } = require('../models/index');
 
 exports.getPasswordOfUser = ({ email }) => {
   return User.findAll({
@@ -200,4 +196,11 @@ exports.updateUser = async ({
     },
     { where: { id } }
   );
+};
+
+exports.saveUserMessage = ({ id, message }) => {
+  return UserMessages.create({
+    user_id: id,
+    message,
+  });
 };
