@@ -59,7 +59,7 @@ exports.createSearchQuery = ({
   page,
 }) => {
   const selectUsersStatement =
-    "SELECT DISTINCT id, CONCAT(first_name,' ', last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, latitude, longitude, specializationIds FROM users" +
+    "SELECT DISTINCT id, CONCAT(first_name,' ', last_name ) as name,email, road, house_number, city, zip_code, firm, image_url as imgUrl, mobile_phone as mobilePhone, latitude, longitude, specializationIds FROM users" +
     ' left join (select user_id, group_concat(specialization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id';
   const joinStatement = getJoinQuery({ specializations, languages });
   const likeStatement = getLikeStatement({ nameOrFirm });

@@ -13,7 +13,6 @@ const proRouter = require('./routes/pro');
 const {
   Appointment,
   Auth,
-  ExpertType,
   Language,
   LawyerAvailability,
   Role,
@@ -24,6 +23,8 @@ const {
   UserSpecialization,
   WeekDay,
   userMessages,
+  TutorialSlot,
+  TutorialSlotDefault,
 } = require('./models');
 
 const port = process.env.PORT || '6060';

@@ -1,6 +1,5 @@
 const Appointment = require('./appointment');
 const Auth = require('./auth');
-const ExpertType = require('./expertType');
 const Language = require('./language');
 const LawyerAvailability = require('./lawyerAvailability');
 const Role = require('./role');
@@ -17,7 +16,6 @@ const TutorialSlotDefault = require('./tutorialSlotsDefault');
 module.exports = {
   Appointment,
   Auth,
-  ExpertType,
   Language,
   LawyerAvailability,
   Role,

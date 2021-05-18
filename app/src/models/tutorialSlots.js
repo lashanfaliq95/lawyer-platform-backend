@@ -1,28 +1,28 @@
-const Sequelize = require('sequelize');
+const { TIME, DATEONLY, BOOLEAN } = require('sequelize');
 
 const sequelize = require('../connectors/database');
 
-const TimeSlot = sequelize.define(
+const TutorialAvailability = sequelize.define(
   'tutorial_availability',
   {
     from_time: {
-      type: Sequelize.TIME,
+      type: TIME,
       allowNull: false,
     },
     to_time: {
-      type: Sequelize.TIME,
+      type: TIME,
       allowNull: false,
     },
     date: {
-      type: Sequelize.DATEONLY,
+      type: DATEONLY,
       allowNull: false,
     },
     is_blocked: {
-      type: Sequelize.BOOLEAN,
+      type: BOOLEAN,
       allowNull: true,
     },
   },
   { timestamps: false }
 );
 
-module.exports = TimeSlot;
+module.exports = TutorialAvailability;

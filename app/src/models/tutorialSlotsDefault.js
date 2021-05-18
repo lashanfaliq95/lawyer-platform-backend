@@ -1,30 +1,30 @@
-const Sequelize = require('sequelize');
+const { TIME, INTEGER } = require('sequelize');
 
 const sequelize = require('../connectors/database');
-const WeekDay = require('./user');
+const WeekDay = require('./weekDay');
 
-const TimeSlot = sequelize.define(
-  'tutorial_availability',
+const TutorialAvailabilityDefault = sequelize.define(
+  'tutorial_availability_defaults',
   {
     from_time: {
-      type: Sequelize.TIME,
+      type: TIME,
       allowNull: false,
     },
     to_time: {
-      type: Sequelize.TIME,
+      type: TIME,
       allowNull: false,
     },
     day_of_week: {
-      type: Sequelize.INTEGER,
+      type: INTEGER,
       allowNull: false,
     },
   },
   { timestamps: false }
 );
 
-TimeSlot.belongsTo(WeekDay, {
+TutorialAvailabilityDefault.belongsTo(WeekDay, {
   targetKey: 'id',
   foreignKey: 'day_of_week',
 });
 
-module.exports = TimeSlot;
+module.exports = TutorialAvailabilityDefault;

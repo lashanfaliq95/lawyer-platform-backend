@@ -3,9 +3,7 @@ USE advoplan;
 
     CREATE TABLE specializations(
         id INT NOT NULL  AUTO_INCREMENT, 
-        specialization VARCHAR(100) NOT NULL,
-        type INT NOT NULL,
-        FOREIGN KEY (type) references specialization_types(id),
+        name VARCHAR(100) NOT NULL,
         PRIMARY KEY (id)
     );
 
