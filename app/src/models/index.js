@@ -12,6 +12,7 @@ const WeekDay = require('./weekDay');
 const UserMessages = require('./userMessages');
 const TutorialSlot = require('./tutorialSlots');
 const TutorialSlotDefault = require('./tutorialSlotsDefault');
+const ExpertTypes = require('./expertTypes');
 
 module.exports = {
   Appointment,
@@ -28,4 +29,5 @@ module.exports = {
   UserMessages,
   TutorialSlot,
   TutorialSlotDefault,
+  ExpertTypes,
 };

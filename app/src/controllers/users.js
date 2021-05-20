@@ -2,6 +2,7 @@ const userDao = require('../dao/users');
 const authUtil = require('../utils/auth');
 const dateUtil = require('../utils/date');
 const userUtil = require('../utils/user');
+const { sendConfirmAccountEmail } = require('../helper/emailHelper');
 const { appointments } = require('../mocks');
 
 exports.createUser = async (req, res) => {
@@ -44,22 +45,28 @@ exports.createLawyer = async (req, res) => {
   const {
     firstName,
     lastName,
-    mobilePhone,
+    telephoneNumber: mobilePhone,
     email,
     password,
-    expertType,
+    jobTitle: expertType,
     road,
     houseNumber,
     city,
     zipCode,
+    gender,
+    tutorial,
+    selectedDateTime,
   } = req.body;
   if (firstName && lastName && mobilePhone && email && password) {
     try {
       const userIds = await userDao.getUserIdFromEmail({ email });
       if (userIds && userIds.length === 0) {
         const id = authUtil.createUserId();
+        const confirmationToken = await authUtil.createToken();
+        const expirationTimeString = dateUtil.timestampInComingHours(24);
         const encryptedPassword = await authUtil.encryptPassword(password);
-        const result = await userDao.registerUser({
+
+         await userDao.registerLawyer({
           id,
           firstName,
           lastName,
@@ -70,16 +77,21 @@ exports.createLawyer = async (req, res) => {
           houseNumber,
           city,
           zipCode,
+          gender,
+          confirmationToken,
+          expirationTimeString,
           password: encryptedPassword,
         });
 
-        if (result) {
-          const userResponse = {
-            id: id,
-            email: email,
-          };
-          res.status(200).send({ data: userResponse });
-        }
+        await sendConfirmAccountEmail(email, {
+          confirmationToken,
+        });
+
+        const userResponse = {
+          id: id,
+          email: email,
+        };
+        res.status(200).send({ data: userResponse });
       } else {
         res.status(400).json({ message: 'User already exists' });
       }

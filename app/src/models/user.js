@@ -1,7 +1,8 @@
-const { STRING, INTEGER, DECIMAL } = require('sequelize');
+const { STRING, INTEGER, DECIMAL, BOOLEAN } = require('sequelize');
 
 const sequelize = require('../connectors/database');
 const Role = require('./role');
+const ExpertTypes = require('./expertTypes');
 
 const Users = sequelize.define(
   'users',
@@ -43,12 +44,17 @@ const Users = sequelize.define(
     reset_token_expiration: STRING,
     longitude: DECIMAL(9, 6),
     latitude: DECIMAL(8, 6),
-    country: STRING,
-    expert_type: STRING,
+    expert_type_id: INTEGER,
+    confirmation_token: STRING,
+    confirmation_token_expiration: STRING,
+    is_account_confirmed: {
+      type: BOOLEAN,
+      defaultValue: 0,
+    },
   },
   { timestamps: false }
 );
 
 Users.belongsTo(Role, { targetKey: 'id', foreignKey: 'role_id' });
-
+Users.belongsTo(ExpertTypes, { targetKey: 'id', foreignKey: 'expert_type_id' });
 module.exports = Users;

@@ -3,10 +3,10 @@ const { QueryTypes /**Op */ } = require('sequelize');
 const sequelize = require('../connectors/database');
 const { User, UserMessages } = require('../models/index');
 
-exports.getPasswordOfUser = ({ email }) => {
+exports.getPasswordOfUser = ({ email, roleId }) => {
   return User.findAll({
-    attributes: ['id', 'password', ['role_id', 'roleId']],
-    where: { email },
+    attributes: ['id', 'password'],
+    where: { email, role_id: roleId },
   });
 };
 
@@ -56,6 +56,9 @@ exports.registerLawyer = ({
   houseNumber,
   city,
   zipCode,
+  gender,
+  confirmationToken,
+  expirationTimeString,
 }) => {
   return User.create({
     id,
@@ -67,9 +70,12 @@ exports.registerLawyer = ({
     last_name: lastName,
     mobile_phone: mobilePhone,
     role_id: 2,
-    expert_type: expertType,
+    expert_type_id: expertType,
     house_number: houseNumber,
     zip_code: zipCode,
+    confirmation_token: confirmationToken,
+    confirmation_token_expiration: expirationTimeString,
+    gender,
   });
 };
 
@@ -160,6 +166,20 @@ exports.saveUserPassword = (id, password) => {
 exports.savePasswordResetToken = ({ id, resetToken, expirationTimeString }) => {
   return User.update(
     { reset_token: resetToken, reset_token_expiration: expirationTimeString },
+    { where: { id } }
+  );
+};
+
+exports.saveAccountConfirmationToken = ({
+  id,
+  resetToken,
+  expirationTimeString,
+}) => {
+  return User.update(
+    {
+      confirmation_token: resetToken,
+      confirmation_token_expiration: expirationTimeString,
+    },
     { where: { id } }
   );
 };

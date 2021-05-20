@@ -13,10 +13,10 @@ if (process.env.NODE_ENV !== 'prod') {
 }
 
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
-  if (email && password) {
+  const { email, password, roleId } = req.body;
+  if (email && password && roleId) {
     try {
-      const result = await userDao.getPasswordOfUser({ email });
+      const result = await userDao.getPasswordOfUser({ email, roleId });
       if (result && result.length !== 0) {
         const user = result[0];
 
@@ -38,10 +38,10 @@ exports.login = async (req, res) => {
 
           await authDao.setRefreshToken({ refreshToken });
           res.status(200).json({
+            id: user.id,
             accessToken,
             refreshToken,
-            id: user.id,
-            roleId: user.roleId,
+            roleId,
           });
         } else {
           res.status(400).json({
@@ -54,6 +54,7 @@ exports.login = async (req, res) => {
           .json({ message: 'User name or password did not match.' });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).send({ message: 'Some thing went wrong' });
     }
   } else {
@@ -150,13 +151,13 @@ exports.getResetToken = async (req, res) => {
     const { token } = req.params;
     const result = await authDao.getResetTokenExpiration({ token });
     if (result && result.length > 0) {
-      const { id, reset_token_expiration, email } = result[0];
-      if (dateUtil.hasTimestampExpired(reset_token_expiration)) {
+      const { id, confirmation_token_expiration, email } = result[0];
+      if (dateUtil.hasTimestampExpired(confirmation_token_expiration)) {
         res.status(200).json({ id, email });
       } else {
         res.status(400).json({ message: 'Reset token has expired' });
       }
-      await authDao.deleteResetToken({ token });
+      // await authDao.deleteConfirmationToken({ token });
     } else {
       res.status(400).json({ message: 'Token not found' });
     }
@@ -165,6 +166,28 @@ exports.getResetToken = async (req, res) => {
     res.status(500).json({ error });
   }
 };
+
+exports.getConfirmationToken = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const result = await authDao.getConfirmationTokenExpiration({ token });
+    if (result && result.length > 0) {
+      const { id, confirmation_token_expiration, email } = result[0];
+      if (dateUtil.hasTimestampExpired(confirmation_token_expiration)) {
+        res.status(200).json({ id, email });
+      } else {
+        res.status(400).json({ message: 'Reset token has expired' });
+      }
+      // await authDao.deleteResetToken({ token });
+    } else {
+      res.status(400).json({ message: 'Token not found' });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+};
+
 
 exports.logout = async (req, res) => {
   try {

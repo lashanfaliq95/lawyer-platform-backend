@@ -39,3 +39,11 @@ exports.sendResetPasswordEmail = (toEmail, variables) =>
     templateID: parseInt(resetPasswordTemplateId),
     Subject: 'Rest you password',
   });
+
+  exports.sendConfirmAccountEmail = (toEmail, variables) =>
+    sendEmail({
+      toEmail,
+      variables,
+      templateID: parseInt(resetPasswordTemplateId),
+      Subject: 'Rest you password',
+    });

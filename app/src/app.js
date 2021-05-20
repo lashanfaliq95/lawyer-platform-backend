@@ -25,6 +25,7 @@ const {
   userMessages,
   TutorialSlot,
   TutorialSlotDefault,
+  ExpertTypes,
 } = require('./models');
 
 const port = process.env.PORT || '6060';

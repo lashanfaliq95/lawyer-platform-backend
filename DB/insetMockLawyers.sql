@@ -1,5 +1,5 @@
     INSERT INTO
-    users( id , first_name , last_name , email , mobile_phone, password, firm , road, house_number, city, zip_code, role_id, image_url, latitude, longitude,gender) 
+    users( id , first_name , last_name , email , mobile_phone, password, firm , road, house_number, city, zip_code, role_id, image_url, latitude, longitude,gender, expert_type_) 
     VALUES
     (
         'mock1', 'Dr. Kai', 'Rohs', 'mockEmail1@gmail.com', 'mocknumber', 'password1', 'Anwaltskanzlei Dr. Kai Rohs', 'Graf-Adolf-Strasse', '21', '40212', 'Düsseldorf', 2, 'http://www.anwaltskanzlei-dr-kai-rohs.de/wp-content/uploads/kai_rohs_quadrat-300x300.png' ,51.218730, 6.781260,'male'
