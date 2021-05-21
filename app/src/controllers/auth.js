@@ -169,7 +169,7 @@ exports.getResetToken = async (req, res) => {
 
 exports.getConfirmationToken = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { token } = req.body;
     const result = await authDao.getConfirmationTokenExpiration({ token });
     if (result && result.length > 0) {
       const { id, confirmation_token_expiration, email } = result[0];
@@ -187,7 +187,6 @@ exports.getConfirmationToken = async (req, res) => {
     res.status(500).json({ error });
   }
 };
-
 
 exports.logout = async (req, res) => {
   try {
