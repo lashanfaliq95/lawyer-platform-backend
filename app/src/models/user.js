@@ -40,13 +40,9 @@ const Users = sequelize.define(
     firm: STRING,
     gender: STRING,
     image_url: STRING,
-    reset_token: STRING,
-    reset_token_expiration: STRING,
     longitude: DECIMAL(9, 6),
     latitude: DECIMAL(8, 6),
     expert_type_id: INTEGER,
-    confirmation_token: STRING,
-    confirmation_token_expiration: STRING,
     is_account_confirmed: {
       type: BOOLEAN,
       defaultValue: 0,

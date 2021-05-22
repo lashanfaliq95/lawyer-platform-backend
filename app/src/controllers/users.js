@@ -1,4 +1,5 @@
 const userDao = require('../dao/users');
+const authDao = require('../dao/auth');
 const authUtil = require('../utils/auth');
 const dateUtil = require('../utils/date');
 const userUtil = require('../utils/user');
@@ -63,10 +64,9 @@ exports.createLawyer = async (req, res) => {
       if (userIds && userIds.length === 0) {
         const id = authUtil.createUserId();
         const confirmationToken = await authUtil.createToken();
-        const expirationTimeString = dateUtil.timestampInComingHours(24);
         const encryptedPassword = await authUtil.encryptPassword(password);
 
-         await userDao.registerLawyer({
+        await userDao.registerLawyer({
           id,
           firstName,
           lastName,
@@ -78,13 +78,13 @@ exports.createLawyer = async (req, res) => {
           city,
           zipCode,
           gender,
-          confirmationToken,
-          expirationTimeString,
           password: encryptedPassword,
         });
 
+        await authDao.saveAccountConfirmationToken({ id, confirmationToken });
+
         await sendConfirmAccountEmail(email, {
-          confirmationToken,
+          token: confirmationToken,
         });
 
         const userResponse = {

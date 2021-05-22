@@ -16,37 +16,46 @@ exports.login = async (req, res) => {
   const { email, password, roleId } = req.body;
   if (email && password && roleId) {
     try {
-      const result = await userDao.getPasswordOfUser({ email, roleId });
+      const result = await userDao.getPasswordOfUser({
+        email,
+        roleId,
+        is_account_confirmed,
+      });
       if (result && result.length !== 0) {
         const user = result[0];
-
-        const isUserAuthenticated = await authUtil.comparePassword(
-          password,
-          user.password
-        );
-
-        if (isUserAuthenticated) {
-          const accessToken = jwt.sign(
-            { id: user.id },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '20m' }
-          );
-          const refreshToken = jwt.sign(
-            { id: user.id },
-            process.env.REFRESH_TOKEN_SECRET
-          );
-
-          await authDao.setRefreshToken({ refreshToken });
-          res.status(200).json({
-            id: user.id,
-            accessToken,
-            refreshToken,
-            roleId,
+        if (roleId === 2 && !is_account_confirmed) {
+          res.status(400).json({
+            error: 'Account has not been confirmed yet',
           });
         } else {
-          res.status(400).json({
-            error: 'User name or password did not match.',
-          });
+          const isUserAuthenticated = await authUtil.comparePassword(
+            password,
+            user.password
+          );
+
+          if (isUserAuthenticated) {
+            const accessToken = jwt.sign(
+              { id: user.id },
+              process.env.ACCESS_TOKEN_SECRET,
+              { expiresIn: '20m' }
+            );
+            const refreshToken = jwt.sign(
+              { id: user.id },
+              process.env.REFRESH_TOKEN_SECRET
+            );
+
+            await authDao.setRefreshToken({ refreshToken });
+            res.status(200).json({
+              id: user.id,
+              accessToken,
+              refreshToken,
+              roleId,
+            });
+          } else {
+            res.status(400).json({
+              error: 'User name or password did not match.',
+            });
+          }
         }
       } else {
         res
@@ -103,16 +112,14 @@ exports.forgot = async (req, res) => {
       if (result && result.length > 0) {
         const { id } = result[0];
         const resetToken = await authUtil.createToken();
-        const expirationTimeString = dateUtil.timestampInComingHours();
 
-        await userDao.savePasswordResetToken({
+        await authDao.savePasswordResetToken({
           id,
           resetToken,
-          expirationTimeString,
         });
 
         const emailResult = await sendResetPasswordEmail(email, {
-          resetToken,
+          token: resetToken,
         });
         res.status(200).json({ data: emailResult });
       } else {
@@ -150,10 +157,11 @@ exports.getResetToken = async (req, res) => {
   try {
     const { token } = req.params;
     const result = await authDao.getResetTokenExpiration({ token });
+    console.log(result[0].dataValues);
     if (result && result.length > 0) {
-      const { id, confirmation_token_expiration, email } = result[0];
-      if (dateUtil.hasTimestampExpired(confirmation_token_expiration)) {
-        res.status(200).json({ id, email });
+      const { user_id: id, created_at } = result[0].dataValues;
+      if (!dateUtil.hasTimestampExpired(created_at)) {
+        res.status(200).json({ id });
       } else {
         res.status(400).json({ message: 'Reset token has expired' });
       }
@@ -172,18 +180,17 @@ exports.getConfirmationToken = async (req, res) => {
     const { token } = req.body;
     const result = await authDao.getConfirmationTokenExpiration({ token });
     if (result && result.length > 0) {
-      const { id, confirmation_token_expiration, email } = result[0];
-      if (dateUtil.hasTimestampExpired(confirmation_token_expiration)) {
-        res.status(200).json({ id, email });
+      const { user_id: id, created_at } = result[0].dataValues;
+      if (!dateUtil.hasTimestampExpired(created_at)) {
+        await userDao.userAccountVerified({ id });
+        res.status(200).json({ id });
       } else {
         res.status(400).json({ message: 'Reset token has expired' });
       }
-      // await authDao.deleteResetToken({ token });
     } else {
       res.status(400).json({ message: 'Token not found' });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error });
   }
 };

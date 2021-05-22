@@ -4,13 +4,15 @@ exports.timestampInComingHours = (hours = 0) => {
   return currentTimeStamp.getTime().toString();
 };
 
-exports.hasTimestampExpired = (expirationTimeStamp) => {
-  const currentTimeStamp = new Date().getTime();
-  if (parseInt(expirationTimeStamp) > currentTimeStamp) {
+exports.hasTimestampExpired = (createdAt) => {
+  const currentTimeStamp = new Date();
+  const expirationTime = new Date(createdAt);
+  expirationTime.setHours(currentTimeStamp.getHours() + 1);
+
+  if (expirationTime > currentTimeStamp) {
     return false;
   }
   return true;
 };
 
 exports.getMySqlDate = (date) => date.slice(0, 10);
-

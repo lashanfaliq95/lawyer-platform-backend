@@ -13,6 +13,8 @@ const UserMessages = require('./userMessages');
 const TutorialSlot = require('./tutorialSlots');
 const TutorialSlotDefault = require('./tutorialSlotsDefault');
 const ExpertTypes = require('./expertTypes');
+const ResetToken = require('./resetToken');
+const ConfirmationToken = require('./confirmationToken');
 
 module.exports = {
   Appointment,
@@ -30,4 +32,6 @@ module.exports = {
   TutorialSlot,
   TutorialSlotDefault,
   ExpertTypes,
+  ResetToken,
+  ConfirmationToken,
 };

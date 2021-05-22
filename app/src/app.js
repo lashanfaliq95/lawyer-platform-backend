@@ -10,24 +10,6 @@ const userRouter = require('./routes/user');
 const searchRouter = require('./routes/search');
 const proRouter = require('./routes/pro');
 
-const {
-  Appointment,
-  Auth,
-  Language,
-  LawyerAvailability,
-  Role,
-  Specialization,
-  TimeSlot,
-  User,
-  UserLanguage,
-  UserSpecialization,
-  WeekDay,
-  userMessages,
-  TutorialSlot,
-  TutorialSlotDefault,
-  ExpertTypes,
-} = require('./models');
-
 const port = process.env.PORT || '6060';
 
 const app = express();
