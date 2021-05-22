@@ -16,11 +16,11 @@ const ConfirmationToken = sequelize.define(
       type: STRING,
       allowNull: false,
     },
-    user_id: {
+    userId: {
       type: STRING,
       allowNull: false,
     },
-    created_at: {
+    createdAt: {
       type: 'TIMESTAMP',
       defaultValue: literal('CURRENT_TIMESTAMP'),
       allowNull: false,
@@ -29,6 +29,6 @@ const ConfirmationToken = sequelize.define(
   { timestamps: false }
 );
 
-ConfirmationToken.belongsTo(User, { targetKey: 'id', foreignKey: 'user_id' });
+ConfirmationToken.belongsTo(User, { targetKey: 'id', foreignKey: 'userId' });
 
 module.exports = ConfirmationToken;

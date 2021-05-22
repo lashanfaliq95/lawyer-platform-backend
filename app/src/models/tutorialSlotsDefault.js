@@ -6,15 +6,15 @@ const WeekDay = require('./weekDay');
 const TutorialAvailabilityDefault = sequelize.define(
   'tutorial_availability_defaults',
   {
-    from_time: {
+    fromTime: {
       type: TIME,
       allowNull: false,
     },
-    to_time: {
+    toTime: {
       type: TIME,
       allowNull: false,
     },
-    day_of_week: {
+    dayOfWeek: {
       type: INTEGER,
       allowNull: false,
     },
@@ -24,7 +24,7 @@ const TutorialAvailabilityDefault = sequelize.define(
 
 TutorialAvailabilityDefault.belongsTo(WeekDay, {
   targetKey: 'id',
-  foreignKey: 'day_of_week',
+  foreignKey: 'dayOfWeek',
 });
 
 module.exports = TutorialAvailabilityDefault;

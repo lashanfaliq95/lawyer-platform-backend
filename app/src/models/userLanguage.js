@@ -10,11 +10,11 @@ const UserLanguage = sequelize.define(
 
 User.belongsToMany(Language, {
   through: UserLanguage,
-  foreignKey: 'user_id',
+  foreignKey: 'userId',
 });
 Language.belongsToMany(User, {
   through: UserLanguage,
-  foreignKey: 'language_id',
+  foreignKey: 'languageId',
 });
 
 module.exports = UserLanguage;

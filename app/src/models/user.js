@@ -12,11 +12,11 @@ const Users = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    first_name: {
+    firstName: {
       type: STRING,
       allowNull: false,
     },
-    last_name: {
+    lastName: {
       type: STRING,
       allowNull: false,
     },
@@ -24,7 +24,7 @@ const Users = sequelize.define(
       type: STRING,
       allowNull: false,
     },
-    mobile_phone: {
+    mobilePhone: {
       type: STRING,
       allowNull: false,
     },
@@ -34,16 +34,16 @@ const Users = sequelize.define(
     },
     fax: STRING,
     road: STRING,
-    house_number: STRING,
+    houseNumber: STRING,
     city: STRING,
-    zip_code: STRING,
+    zipCode: STRING,
     firm: STRING,
     gender: STRING,
-    image_url: STRING,
+    imageUrl: STRING,
     longitude: DECIMAL(9, 6),
     latitude: DECIMAL(8, 6),
-    expert_type_id: INTEGER,
-    is_account_confirmed: {
+    expertId: INTEGER,
+    isAccountConfirmed: {
       type: BOOLEAN,
       defaultValue: 0,
     },
@@ -51,6 +51,6 @@ const Users = sequelize.define(
   { timestamps: false }
 );
 
-Users.belongsTo(Role, { targetKey: 'id', foreignKey: 'role_id' });
-Users.belongsTo(ExpertTypes, { targetKey: 'id', foreignKey: 'expert_type_id' });
+Users.belongsTo(Role, { targetKey: 'id', foreignKey: 'roleId' });
+Users.belongsTo(ExpertTypes, { targetKey: 'id', foreignKey: 'expertId' });
 module.exports = Users;

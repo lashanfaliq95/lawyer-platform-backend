@@ -31,7 +31,7 @@ exports.filterLawyers = async (req, res) => {
       location,
       page,
     } = qs.parse(req.query);
-    
+
     const languageArray = utils.getIntArrayFromString(languages);
     const specializationsArray = utils.getIntArrayFromString(specializations);
     const result = await dao.getSearchResults({
@@ -50,6 +50,7 @@ exports.filterLawyers = async (req, res) => {
       }));
     res.status(200).send(updatedResult);
   } catch (error) {
+    console.log(error);
     res.status(500).send({ message: 'Something went wrong.' });
   }
 };
@@ -61,9 +62,9 @@ exports.getSuggestions = async (req, res) => {
       const result = await dao.getNameOrFirmSuggestions(`%${nameOrFirm}%`);
       if (result && result.length > 0) {
         const updatedResult = [];
-        for(let i=0;i<6;i++){
-          if(result[i]){
-          updatedResult.push(result[i].name|| result[i].specialization)
+        for (let i = 0; i < 6; i++) {
+          if (result[i]) {
+            updatedResult.push(result[i].name || result[i].name);
           }
         }
         res.status(200).send(updatedResult);
@@ -84,6 +85,7 @@ exports.getSuggestions = async (req, res) => {
       res.send(400).send({ message: 'Invalid parameters' });
     }
   } catch (error) {
+    console.log(error);
     res.status(500).send({ message: 'Something went wrong.' });
   }
 };

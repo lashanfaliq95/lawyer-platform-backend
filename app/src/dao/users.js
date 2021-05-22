@@ -5,8 +5,8 @@ const { User, UserMessages } = require('../models/index');
 
 exports.getPasswordOfUser = ({ email, roleId }) => {
   return User.findAll({
-    attributes: ['id', 'password', ],
-    where: { email, role_id: roleId },
+    attributes: ['id', 'password'],
+    where: { email, roleId },
   });
 };
 
@@ -35,12 +35,12 @@ exports.registerUser = ({
 }) => {
   return User.create({
     id,
-    first_name: firstName,
-    last_name: lastName,
+    firstName,
+    lastName,
     email,
-    mobile_phone: mobilePhone,
+    mobilePhone,
     password,
-    role_id: 1,
+    roleId: 1,
   });
 };
 
@@ -64,23 +64,23 @@ exports.registerLawyer = ({
     password,
     road,
     city,
-    first_name: firstName,
-    last_name: lastName,
-    mobile_phone: mobilePhone,
-    role_id: 2,
-    expert_type_id: expertType,
-    house_number: houseNumber,
-    zip_code: zipCode,
+    firstName,
+    lastName,
+    mobilePhone,
+    roleId: 2,
+    expertId: expertType,
+    houseNumber,
+    zipCode,
     gender,
   });
 };
 
 exports.getLawyer = (id) => {
   return sequelize.query(
-    'SELECT DISTINCT id, CONCAT(first_name, " ", last_name ) as name, email, mobile_phone as mobilePhone, road, house_number as houseNumber, zip_code as zipCode, city, firm, image_url as imgUrl, fax, gender, latitude, longitude, specializationIds, languageIds FROM users' +
-      ' left join (select user_id, group_concat(specialization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id' +
-      ' left join (select user_id, group_concat(language_id) as languageIds from user_languages group by user_id) b on users.id=b.user_id' +
-      ' WHERE role_id=? AND users.id=?',
+    'SELECT DISTINCT id, CONCAT(firstName, " ", lastName ) as name, email, mobilePhone, road, houseNumber, zipCode, city, firm, imageUrl as imgUrl, fax, gender, latitude, longitude, specializationIds, languageIds FROM users' +
+      ' left join (select userId, group_concat(specialization_id) as specializationIds from user_specializations group by userId) a on users.id=a.userId' +
+      ' left join (select userId, group_concat(languageId) as languageIds from user_languages group by userId) b on users.id=b.userId' +
+      ' WHERE roleId=? AND users.id=?',
     { replacements: [2, id], type: QueryTypes.SELECT }
   );
 };
@@ -89,22 +89,19 @@ exports.getLawyers = () => {
   return User.findAll({
     attributes: [
       'id',
-      [
-        sequelize.fn('CONCAT', col('first_name'), ' ', col('last_name')),
-        'name',
-      ],
+      [sequelize.fn('CONCAT', col('firstName'), ' ', col('lastName')), 'name'],
       'email',
       'road',
-      ['house_number', 'houseNumber'],
+      'houseNumber',
       'city',
-      ['zip_code', 'zipCode'],
+      'zipCode',
       'firm',
-      ['image_url', 'imgUrl'],
-      ['mobile_phone', 'mobilePhone'],
+      ['imageUrl', 'imgUrl'],
+      'mobilePhone',
       'latitude',
       'longitude',
     ],
-    where: { role_id: 2 },
+    where: { roleId: 2 },
   });
 };
 
@@ -113,14 +110,14 @@ exports.getLawyerAvailability = ({ id, startDate }) => {
 
   // return LawyerAvailability.findAll({
   //   attributes: [
-  //     ['lawyer_id', 'id'],
+  //     ['laweyerId', 'id'],
   //     ['time_slot', 'timeSlot'],
-  //     ['day_of_week', 'dayOfWeek'],
+  //     ['dayOfWeek', 'dayOfWeek'],
   //     'date',
   //   ],
   //   where: {
   //     available: true,
-  //     lawyer_id: id,
+  //     laweyerId: id,
   //     date: {
   //       [Op.gt]: startDate,
   //       [Op.lte]: new Date(
@@ -131,8 +128,8 @@ exports.getLawyerAvailability = ({ id, startDate }) => {
   // });
 
   return sequelize.query(
-    'SELECT lawyer_id AS id, time_slot AS timeSlot, date, day_of_week as dayOfWeek ' +
-      'FROM lawyer_availability WHERE available = true AND lawyer_id = ? AND ' +
+    'SELECT laweyerId AS id, time_slot AS timeSlot, date, dayOfWeek as dayOfWeek ' +
+      'FROM lawyer_availability WHERE available = true AND laweyerId = ? AND ' +
       'date > ? AND date <= DATE_ADD(?, INTERVAL 5 DAY)',
     { replacements: [id, startDate, startDate], type: QueryTypes.SELECT }
   );
@@ -142,7 +139,7 @@ exports.getLawyerAvailability = ({ id, startDate }) => {
   // return await new Promise((resolve, reject) => {
   //   return getConnection(async (connection) => {
   //     connection.query(
-  //       'SELECT lawyer_id AS id, time_slot AS timeSlot, date, day_of_week as dayOfWeek FROM lawyer_availability WHERE available=true AND lawyer_id=? AND date > ? AND date <= DATE_ADD(?,INTERVAL 5 DAY)',
+  //       'SELECT laweyerId AS id, time_slot AS timeSlot, date, dayOfWeek as dayOfWeek FROM lawyer_availability WHERE available=true AND laweyerId=? AND date > ? AND date <= DATE_ADD(?,INTERVAL 5 DAY)',
   //       [id, startDate, startDate],
   //       (error, result) => {
   //         if (error) {
@@ -184,10 +181,10 @@ exports.updateUser = async ({
 }) => {
   return User.update(
     {
-      first_name: firstName,
-      last_name: lastName,
+      firstName,
+      lastName,
       email,
-      mobile_phone: phoneNumber,
+      mobilePhone: phoneNumber,
     },
     { where: { id } }
   );
@@ -196,7 +193,7 @@ exports.updateUser = async ({
 exports.userAccountVerified = ({ id }) => {
   return User.update(
     {
-      is_account_confirmed: 1,
+      isAccountConfirmed: 1,
     },
     { where: { id } }
   );
@@ -204,7 +201,7 @@ exports.userAccountVerified = ({ id }) => {
 
 exports.saveUserMessage = ({ id, message }) => {
   return UserMessages.create({
-    user_id: id,
+    userId: id,
     message,
   });
 };

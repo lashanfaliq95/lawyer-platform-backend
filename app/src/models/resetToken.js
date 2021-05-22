@@ -16,11 +16,11 @@ const ResetToken = sequelize.define(
       type: STRING,
       allowNull: false,
     },
-    user_id: {
+    userId: {
       type: STRING,
       allowNull: false,
     },
-    created_at: {
+    createdAt: {
       type: 'TIMESTAMP',
       defaultValue: literal('CURRENT_TIMESTAMP'),
       allowNull: false,
@@ -29,6 +29,6 @@ const ResetToken = sequelize.define(
   { timestamps: false }
 );
 
-ResetToken.belongsTo(User, { targetKey: 'id', foreignKey: 'user_id' });
+ResetToken.belongsTo(User, { targetKey: 'id', foreignKey: 'userId' });
 
 module.exports = ResetToken;

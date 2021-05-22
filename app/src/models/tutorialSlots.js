@@ -5,11 +5,11 @@ const sequelize = require('../connectors/database');
 const TutorialAvailability = sequelize.define(
   'tutorial_availability',
   {
-    from_time: {
+    fromTime: {
       type: TIME,
       allowNull: false,
     },
-    to_time: {
+    toTime: {
       type: TIME,
       allowNull: false,
     },
@@ -17,7 +17,7 @@ const TutorialAvailability = sequelize.define(
       type: DATEONLY,
       allowNull: false,
     },
-    is_blocked: {
+    isBlocked: {
       type: BOOLEAN,
       allowNull: true,
     },

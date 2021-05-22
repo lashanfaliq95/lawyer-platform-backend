@@ -14,8 +14,8 @@ exports.getLanguagesFilters = () => {
 
 exports.getNameOrFirmSuggestions = (nameOrFirm) => {
   return sequelize.query(
-    'SELECT specialization from specializations WHERE specialization LIKE ?' +
-      " UNION select CONCAT(first_name,' ', last_name ) as name from users where role_id=2 AND CONCAT(first_name, ' ', last_name) LIKE ?",
+    'SELECT name from specializations WHERE name LIKE ?' +
+      " UNION select CONCAT(firstName,' ', lastName ) as name from users where roleId=2 AND CONCAT(firstName, ' ', lastName) LIKE ?",
     {
       replacements: [nameOrFirm, nameOrFirm],
       type: QueryTypes.SELECT,

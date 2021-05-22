@@ -19,11 +19,11 @@ exports.login = async (req, res) => {
       const result = await userDao.getPasswordOfUser({
         email,
         roleId,
-        is_account_confirmed,
+        isAccountConfirmed,
       });
       if (result && result.length !== 0) {
         const user = result[0];
-        if (roleId === 2 && !is_account_confirmed) {
+        if (roleId === 2 && !isAccountConfirmed) {
           res.status(400).json({
             error: 'Account has not been confirmed yet',
           });
@@ -159,8 +159,8 @@ exports.getResetToken = async (req, res) => {
     const result = await authDao.getResetTokenExpiration({ token });
     console.log(result[0].dataValues);
     if (result && result.length > 0) {
-      const { user_id: id, created_at } = result[0].dataValues;
-      if (!dateUtil.hasTimestampExpired(created_at)) {
+      const { userId: id, createdAt } = result[0].dataValues;
+      if (!dateUtil.hasTimestampExpired(createdAt)) {
         res.status(200).json({ id });
       } else {
         res.status(400).json({ message: 'Reset token has expired' });
@@ -180,10 +180,10 @@ exports.getConfirmationToken = async (req, res) => {
     const { token } = req.body;
     const result = await authDao.getConfirmationTokenExpiration({ token });
     if (result && result.length > 0) {
-      const { user_id: id, created_at } = result[0].dataValues;
-      if (!dateUtil.hasTimestampExpired(created_at)) {
+      const { userId: id, createdAt } = result[0].dataValues;
+      if (!dateUtil.hasTimestampExpired(createdAt)) {
         await userDao.userAccountVerified({ id });
-        res.status(200).json({ id });
+        res.status(200).json({ isConfirmationTokenValid: true });
       } else {
         res.status(400).json({ message: 'Reset token has expired' });
       }
