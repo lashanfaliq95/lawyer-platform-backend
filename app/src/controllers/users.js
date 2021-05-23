@@ -156,7 +156,7 @@ exports.getLawyerAvailability = async (req, res) => {
       // } else {
       //   res.status(200).send(result);
       // }
-      res.status(200).json({ message: 'not implemented' });
+      res.status(501).json({ message: 'not implemented' });
     } else {
       res.status(400).json({ message: 'Invalid parameters' });
     }

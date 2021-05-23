@@ -50,7 +50,6 @@ exports.filterLawyers = async (req, res) => {
       }));
     res.status(200).send(updatedResult);
   } catch (error) {
-    console.log(error);
     res.status(500).send({ message: 'Something went wrong.' });
   }
 };
@@ -85,7 +84,6 @@ exports.getSuggestions = async (req, res) => {
       res.send(400).send({ message: 'Invalid parameters' });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).send({ message: 'Something went wrong.' });
   }
 };

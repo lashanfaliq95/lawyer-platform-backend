@@ -165,7 +165,6 @@ exports.getResetToken = async (req, res) => {
       } else {
         res.status(400).json({ message: 'Reset token has expired' });
       }
-      // await authDao.deleteConfirmationToken({ token });
     } else {
       res.status(400).json({ message: 'Token not found' });
     }
@@ -185,7 +184,7 @@ exports.getConfirmationToken = async (req, res) => {
         await userDao.userAccountVerified({ id });
         res.status(200).json({ isConfirmationTokenValid: true });
       } else {
-        res.status(400).json({ message: 'Reset token has expired' });
+        res.status(400).json({ message: 'confirmation token has expired' });
       }
     } else {
       res.status(400).json({ message: 'Token not found' });
