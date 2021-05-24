@@ -2,27 +2,34 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/users.js');
 const authenticateJWT = require('../middleware/auth');
+const wrap = require('../helper/errorHelper');
 
-router.post('/', userController.createUser);
+router.post('/', wrap(userController.createUser));
 
-router.delete('/:id', userController.deleteUser);
+router.delete('/:id', wrap(userController.deleteUser));
 
-router.put('/:id', userController.updateUser);
+router.put('/:id', wrap(userController.updateUser));
 
-router.put('/:id/password', userController.updateUserPassword);
+router.put('/:id/password', wrap(userController.updateUserPassword));
 
-router.post('/:id/message', userController.createUserMessage);
+router.post('/:id/message', wrap(userController.createUserMessage));
 
-router.get('/:id/appointments', userController.getUserAppointments);
+router.get('/:id/appointments', wrap(userController.getUserAppointments));
 
-router.post('/lawyers', userController.createLawyer);
+router.post('/lawyers', wrap(userController.createLawyer));
 
-router.get('/lawyers', userController.getLawyers);
+router.get('/lawyers', wrap(userController.getLawyers));
 
-router.get('/lawyers/:id', userController.getLawyer);
+router.get('/lawyers/:id', wrap(userController.getLawyer));
 
-router.get('/lawyers/:id/availability', userController.getLawyerAvailability);
+router.get(
+  '/lawyers/:id/availability',
+  wrap(userController.getLawyerAvailability)
+);
 
-router.get('/lawyers/:id/appointments', userController.getLawyerAppointments);
+router.get(
+  '/lawyers/:id/appointments',
+  wrap(userController.getLawyerAppointments)
+);
 
 module.exports = router;

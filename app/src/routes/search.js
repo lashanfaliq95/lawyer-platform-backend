@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const searchController = require('../controllers/search.js');
+const wrap = require('../helper/errorHelper');
 
-router.get('/lawyers', searchController.filterLawyers);
+router.get('/lawyers', wrap(searchController.filterLawyers));
 
-router.get('/filters', searchController.getFilters);
+router.get('/suggestions', wrap(searchController.getSuggestions));
 
-router.get('/suggestions', searchController.getSuggestions);
-
-router.get('/suggestions/locations', searchController.getPlaces);
+router.get('/suggestions/locations', wrap(searchController.getPlaces));
 
 module.exports = router;
