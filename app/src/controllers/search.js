@@ -30,7 +30,7 @@ exports.filterLawyers = async (req, res) => {
         ? lawyer.specializationIds.split(',').map((id) => parseInt(id))
         : null,
     }));
-  return res.status(200).send(updatedResult);
+  return res.status(200).json(updatedResult);
 };
 
 exports.getSuggestions = async (req, res) => {
@@ -44,27 +44,27 @@ exports.getSuggestions = async (req, res) => {
           updatedResult.push(result[i].name || result[i].name);
         }
       }
-      return res.status(200).send(updatedResult);
+      return res.status(200).json(updatedResult);
     }
-    return res.status(200).send([]);
+    return res.status(200).json([]);
   } else if (location) {
     const response = await utils.getPlaces(location);
     if (response && response.data) {
       const updatedResponse = response.data.predictions.map(
         (suggestion) => suggestion.structured_formatting.main_text
       );
-      return res.status(200).send(updatedResponse);
+      return res.status(200).json(updatedResponse);
     }
-    return res.status(200).send([]);
+    return res.status(200).json([]);
   }
-  return res.send(400).send({ message: 'Invalid parameters' });
+  return res.json(400).json({ message: 'Invalid parameters' });
 };
 
 exports.getPlaces = async (req, res) => {
   const { input } = qs.parse(req.query);
   if (input) {
     const response = await utils.getPlaces(input);
-    return res.status(200).send(response.data);
+    return res.status(200).json(response.data);
   }
-  return res.send(400).send({ message: 'Invalid parameters' });
+  return res.json(400).json({ message: 'Invalid parameters' });
 };
