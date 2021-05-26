@@ -13,7 +13,7 @@ const getJoinQuery = ({ specializations, languages }) => {
       mysql.format(leftJoin, [
         'user_specializations',
         'users.id',
-        'user_specializations.user_id',
+        'user_specializations.userId',
       ]);
 
     whereConditions =
@@ -26,20 +26,20 @@ const getJoinQuery = ({ specializations, languages }) => {
       mysql.format(leftJoin, [
         'user_languages',
         'users.id',
-        'user_languages.user_id',
+        'user_languages.userId',
       ]);
 
     whereConditions =
-      whereConditions + mysql.format(inArray, ['language_id', languages]);
+      whereConditions + mysql.format(inArray, ['languageId', languages]);
   }
-  return `${joinStatement} WHERE role_id=2 AND${whereConditions}`;
+  return `${joinStatement} WHERE roleId=2 AND${whereConditions}`;
 };
 
 const getLikeStatement = ({ nameOrFirm }) => {
   if (nameOrFirm) {
     const matchNameOrFirm = `%${nameOrFirm}%`;
     return mysql.format(
-      "(CONCAT(first_name, ' ', last_name) LIKE ? OR firm LIKE ?)",
+      "(CONCAT(firstName, ' ', lastName) LIKE ? OR firm LIKE ?)",
       [matchNameOrFirm, matchNameOrFirm]
     );
   }
@@ -59,8 +59,8 @@ exports.createSearchQuery = ({
   page,
 }) => {
   const selectUsersStatement =
-    "SELECT DISTINCT id, CONCAT(first_name,' ', last_name ) as name,email, address, firm, image_url as imgUrl, mobile_phone as mobilePhone, latitude, longitude, specializationIds FROM users" +
-    ' left join (select user_id, group_concat(specialization_id) as specializationIds from user_specializations group by user_id) a on users.id=a.user_id';
+    "SELECT DISTINCT id, CONCAT(firstName,' ', lastName ) as name, email, road, houseNumber, city, zipCode, firm, imageUrl, mobilePhone, latitude, longitude, expertId, city, gender, specializationIds FROM users" +
+    ' left join (select userId, group_concat(specialization_id) as specializationIds from user_specializations group by userId) a on users.id=a.userId';
   const joinStatement = getJoinQuery({ specializations, languages });
   const likeStatement = getLikeStatement({ nameOrFirm });
   const limitStatement = getLimitStatement(page);

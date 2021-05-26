@@ -1,53 +1,56 @@
-const Sequelize = require('sequelize');
+const { STRING, INTEGER, DECIMAL, BOOLEAN } = require('sequelize');
 
 const sequelize = require('../connectors/database');
 const Role = require('./role');
-const ExpertType = require('./expertType');
+const ExpertTypes = require('./expertTypes');
 
-const User = sequelize.define(
+const Users = sequelize.define(
   'users',
   {
     id: {
-      type: Sequelize.STRING,
+      type: STRING,
       allowNull: false,
       primaryKey: true,
     },
-    first_name: {
-      type: Sequelize.STRING,
+    firstName: {
+      type: STRING,
       allowNull: false,
     },
-    last_name: {
-      type: Sequelize.STRING,
+    lastName: {
+      type: STRING,
       allowNull: false,
     },
     email: {
-      type: Sequelize.STRING,
+      type: STRING,
       allowNull: false,
     },
-    mobile_phone: {
-      type: Sequelize.STRING,
+    mobilePhone: {
+      type: STRING,
       allowNull: false,
     },
     password: {
-      type: Sequelize.STRING,
+      type: STRING,
       allowNull: false,
     },
-    fax: Sequelize.STRING,
-    address: Sequelize.STRING,
-    firm: Sequelize.STRING,
-    gender: Sequelize.INTEGER,
-    image_url: Sequelize.STRING,
-    reset_token: Sequelize.STRING,
-    reset_token_expiration: Sequelize.STRING,
-    longitude: Sequelize.DECIMAL(9, 6),
-    latitude: Sequelize.DECIMAL(8, 6),
-    country: Sequelize.STRING,
-    zip_code: Sequelize.INTEGER,
+    fax: STRING,
+    road: STRING,
+    houseNumber: STRING,
+    city: STRING,
+    zipCode: STRING,
+    firm: STRING,
+    gender: STRING,
+    imageUrl: STRING,
+    longitude: DECIMAL(9, 6),
+    latitude: DECIMAL(8, 6),
+    expertId: INTEGER,
+    isAccountConfirmed: {
+      type: BOOLEAN,
+      defaultValue: 0,
+    },
   },
   { timestamps: false }
 );
 
-User.belongsTo(Role, { targetKey: 'id', foreignKey: 'role_id' });
-User.belongsTo(ExpertType, { targetKey: 'id', foreignKey: 'expert_type_id' });
-
-module.exports = User;
+Users.belongsTo(Role, { targetKey: 'id', foreignKey: 'roleId' });
+Users.belongsTo(ExpertTypes, { targetKey: 'id', foreignKey: 'expertId' });
+module.exports = Users;

@@ -21,11 +21,11 @@ const Appointment = sequelize.define(
   { timestamps: false }
 );
 
-Appointment.belongsTo(User, { targetKey: 'id', foreignKey: 'user_id' });
-Appointment.belongsTo(User, { targetKey: 'id', foreignKey: 'lawyer_id' });
+Appointment.belongsTo(User, { targetKey: 'id', foreignKey: 'userId' });
+Appointment.belongsTo(User, { targetKey: 'id', foreignKey: 'laweyerId' });
 Appointment.belongsTo(TimeSlot, {
   targetKey: 'id',
-  foreignKey: 'time_slot_id',
+  foreignKey: 'timeSlotId',
 });
 
 module.exports = Appointment;

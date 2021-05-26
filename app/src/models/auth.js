@@ -11,7 +11,7 @@ const Auth = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    refresh_token: {
+    refreshToken: {
       type: Sequelize.STRING,
       allowNull: false,
     },

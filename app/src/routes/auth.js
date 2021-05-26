@@ -1,17 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/auth.js');
+const wrap = require('../helper/errorHelper');
 
-router.post('/login', authController.login);
+router.post('/login', wrap(authController.login));
 
-router.post('/forgot', authController.forgot);
+router.post('/forgot', wrap(authController.forgot));
 
-router.get('/reset-token/:token', authController.getResetToken);
+router.get('/reset-token/:token', wrap(authController.getResetToken));
 
-router.post('/reset-password', authController.resetUserPassword);
+router.post('/confirmation-token/', wrap(authController.getConfirmationToken));
 
-router.post('/token', authController.token);
+router.post('/reset-password', wrap(authController.resetUserPassword));
 
-router.post('/logout', authController.logout);
+router.post('/token', wrap(authController.token));
+
+router.post('/logout', wrap(authController.logout));
 
 module.exports = router;

@@ -12,7 +12,7 @@ const UserSpecialization = sequelize.define(
 
 User.belongsToMany(Specialization, {
   through: UserSpecialization,
-  foreignKey: 'user_id',
+  foreignKey: 'userId',
 });
 Specialization.belongsToMany(User, {
   through: UserSpecialization,

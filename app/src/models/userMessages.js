@@ -21,7 +21,7 @@ const UserMessages = sequelize.define(
 );
 
 UserMessages.belongsTo(User, {
-  foreignKey: 'user_id',
+  foreignKey: 'userId',
 });
 
 module.exports = UserMessages;

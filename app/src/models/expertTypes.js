@@ -1,22 +1,22 @@
-const Sequelize = require('sequelize');
+const { INTEGER, STRING } = require('sequelize');
 
 const sequelize = require('../connectors/database');
 
-const ExpertType = sequelize.define(
+const ExpertTypes = sequelize.define(
   'expert_types',
   {
     id: {
-      type: Sequelize.INTEGER,
+      type: INTEGER,
       autoIncrement: true,
       allowNull: false,
       primaryKey: true,
     },
     name: {
-      type: Sequelize.STRING,
+      type: STRING,
       allowNull: false,
     },
   },
   { timestamps: false }
 );
 
-module.exports = ExpertType;
+module.exports = ExpertTypes;

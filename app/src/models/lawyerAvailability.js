@@ -19,9 +19,9 @@ const LawyerAvailability = sequelize.define(
 );
 
 // foreign keys and primary key to be added
-// FOREIGN KEY (day_of_week) REFERENCES week_days(id),
+// FOREIGN KEY (dayOfWeek) REFERENCES week_days(id),
 // FOREIGN KEY (time_slot) REFERENCES time_slot(id),
-// FOREIGN KEY (lawyer_id) REFERENCES users(id),
-// PRIMARY KEY(lawyer_id,time_slot,date)
+// FOREIGN KEY (laweyerId) REFERENCES users(id),
+// PRIMARY KEY(laweyerId,time_slot,date)
 
 module.exports = LawyerAvailability;

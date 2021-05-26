@@ -13,165 +13,151 @@ if (process.env.NODE_ENV !== 'prod') {
 }
 
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
-  if (email && password) {
-    try {
-      const result = await userDao.getPasswordOfUser({ email });
-      if (result && result.length !== 0) {
-        const user = result[0];
+  const { email, password, roleId } = req.body;
+  if (email && password && roleId) {
+    const result = await userDao.getPasswordOfUser({
+      email,
+      roleId,
+    });
 
-        const isUserAuthenticated = await authUtil.comparePassword(
-          password,
-          user.password
+    if (result && result.length !== 0) {
+      const user = result[0];
+      if (roleId === 2 && !user.isAccountConfirmed) {
+        return res.status(400).json({
+          error: 'Account has not been confirmed yet',
+        });
+      }
+      const isUserAuthenticated = await authUtil.comparePassword(
+        password,
+        user.password
+      );
+
+      if (isUserAuthenticated) {
+        const accessToken = jwt.sign(
+          { id: user.id },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: '20m' }
+        );
+        const refreshToken = jwt.sign(
+          { id: user.id },
+          process.env.REFRESH_TOKEN_SECRET
         );
 
-        if (isUserAuthenticated) {
-          const accessToken = jwt.sign(
-            { id: user.id },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '20m' }
-          );
-          const refreshToken = jwt.sign(
-            { id: user.id },
-            process.env.REFRESH_TOKEN_SECRET
-          );
-
-          await authDao.setRefreshToken({ refreshToken });
-          res.status(200).json({
-            accessToken,
-            refreshToken,
-            id: user.id,
-            roleId: user.roleId,
-          });
-        } else {
-          res.status(400).json({
-            error: 'User name or password did not match.',
-          });
-        }
-      } else {
-        res
-          .status(400)
-          .json({ message: 'User name or password did not match.' });
+        await authDao.setRefreshToken({ refreshToken });
+        return res.status(200).json({
+          id: user.id,
+          accessToken,
+          refreshToken,
+          roleId,
+        });
       }
-    } catch (error) {
-      res.status(500).send({ message: 'Some thing went wrong' });
     }
-  } else {
-    res.status(400).json({ message: 'User name or password not defined.' });
+    return res
+      .status(400)
+      .json({ message: 'User name or password did not match.' });
   }
+  return res
+    .status(400)
+    .json({ message: 'User name or password not defined.' });
 };
 
 exports.token = async (req, res) => {
-  try {
-    const { refreshToken } = req.body;
+  const { refreshToken } = req.body;
 
-    if (!refreshToken) {
-      return res.sendStatus(401);
-    }
-    const result = await authDao.getRefreshToken({ refreshToken });
-    const isRefreshTokenValid = result && result[0];
+  if (!refreshToken) {
+    return res.sendStatus(401);
+  }
+  const result = await authDao.getRefreshToken({ refreshToken });
+  const isRefreshTokenValid = result && result[0];
 
-    if (!isRefreshTokenValid) {
+  if (!isRefreshTokenValid) {
+    return res.sendStatus(403);
+  }
+
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) {
       return res.sendStatus(403);
     }
+    const accessToken = jwt.sign(
+      { email: result[0].email },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '20m' }
+    );
 
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-      if (err) {
-        return res.sendStatus(403);
-      }
-      const accessToken = jwt.sign(
-        { email: result[0].email },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '20m' }
-      );
-
-      res.status(200).json({
-        accessToken,
-      });
+    return res.status(200).json({
+      accessToken,
     });
-  } catch (error) {
-    res.status(500).send({ error });
-  }
+  });
 };
 
 exports.forgot = async (req, res) => {
   const { email } = req.body;
   if (email) {
-    try {
-      const result = await userDao.getIdOfUser({ email });
-      if (result && result.length > 0) {
-        const { id } = result[0];
-        const resetToken = await authUtil.createToken();
-        const expirationTimeString = dateUtil.timestampInComingHours();
+    const result = await userDao.getIdOfUser({ email });
+    if (result && result.length > 0) {
+      const { id } = result[0];
+      const resetToken = await authUtil.createToken();
 
-        await userDao.savePasswordResetToken({
-          id,
-          resetToken,
-          expirationTimeString,
-        });
+      await authDao.savePasswordResetToken({
+        id,
+        resetToken,
+      });
 
-        const emailResult = await sendResetPasswordEmail(email, {
-          resetToken,
-        });
-        res.status(200).json({ data: emailResult });
-      } else {
-        res.status(400).json({ message: 'Email not found' });
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error });
+      const emailResult = await sendResetPasswordEmail(email, {
+        token: resetToken,
+      });
+      return res.status(200).json({ data: emailResult });
     }
-  } else {
-    res.status(400).json({ message: 'User name or password not defined.' });
+    return res.status(400).json({ message: 'Email not found' });
   }
+  return res
+    .status(400)
+    .json({ message: 'User name or password not defined.' });
 };
 
 exports.resetUserPassword = async (req, res) => {
-  try {
-    const { id, password, email } = req.body;
-    if (id && password) {
-      const encryptedPassword = await authUtil.encryptPassword(password);
-      await userDao.saveUserPassword(id, encryptedPassword);
-      // await emailHelper.sendPasswordResetSuccessEmail({
-      //   to: email,
-      // });
+  const { id, password, email } = req.body;
+  if (id && password) {
+    const encryptedPassword = await authUtil.encryptPassword(password);
+    await userDao.saveUserPassword(id, encryptedPassword);
+    // await emailHelper.sendPasswordResetSuccessEmail({
+    //   to: email,
+    // });
 
-      res.status(200).json({ message: 'Password Reset success' });
-    } else {
-      res.status(400).json({ message: 'Invalid parameters' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Password Reset failure' });
+    return res.status(200).json({ message: 'Password Reset success' });
   }
+  return res.status(400).json({ message: 'Invalid parameters' });
 };
 
 exports.getResetToken = async (req, res) => {
-  try {
-    const { token } = req.params;
-    const result = await authDao.getResetTokenExpiration({ token });
-    if (result && result.length > 0) {
-      const { id, reset_token_expiration, email } = result[0];
-      if (dateUtil.hasTimestampExpired(reset_token_expiration)) {
-        res.status(200).json({ id, email });
-      } else {
-        res.status(400).json({ message: 'Reset token has expired' });
-      }
-      await authDao.deleteResetToken({ token });
-    } else {
-      res.status(400).json({ message: 'Token not found' });
+  const { token } = req.params;
+  const result = await authDao.getResetTokenExpiration({ token });
+  if (result && result.length > 0) {
+    const { userId: id, createdAt } = result[0].dataValues;
+    if (!dateUtil.hasTimestampExpired(createdAt)) {
+      return res.status(200).json({ id });
     }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error });
+    return res.status(400).json({ message: 'Reset token has expired' });
   }
+  return res.status(400).json({ message: 'Token not found' });
+};
+
+exports.getConfirmationToken = async (req, res) => {
+  const { token } = req.body;
+  const result = await authDao.getConfirmationTokenExpiration({ token });
+  if (result && result.length > 0) {
+    const { userId: id, createdAt } = result[0].dataValues;
+    if (!dateUtil.hasTimestampExpired(createdAt)) {
+      await userDao.userAccountVerified({ id });
+      return res.status(200).json({ isConfirmationTokenValid: true });
+    }
+    return res.status(400).json({ message: 'confirmation token has expired' });
+  }
+  return res.status(400).json({ message: 'Token not found' });
 };
 
 exports.logout = async (req, res) => {
-  try {
-    const { refreshToken } = req.body;
-    await authDao.deleteRefreshToken({ refreshToken });
-    res.status(200).send('Logout successful');
-  } catch (error) {
-    res.status(500).send({ error });
-  }
+  const { refreshToken } = req.body;
+  await authDao.deleteRefreshToken({ refreshToken });
+  return res.status(200).send('Logout successful');
 };
