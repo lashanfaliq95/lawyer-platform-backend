@@ -104,16 +104,17 @@ exports.getLawyerAvailability = async (req, res) => {
   const { id } = req.params;
   const { startDate } = req.query;
   if (id) {
-    // const result = await userDao.getLawyerAvailability({
-    //   id,
-    //   startDate: dateUtil.getMySqlDate(startDate),
-    // });
-    // if (result && udresult.length > 0) {
-    //   res.status(200).send(userUtil.formatResponse(id, result, startDate));
-    // } else {
-    //   res.status(200).send(result);
-    // }
-    return res.status(501).json({ message: 'not implemented' });
+    const result = await userDao.getLawyerAvailability({
+      id,
+      startDate: dateUtil.getMySqlDate(startDate),
+    });
+    if (result && result.length > 0) {
+      return res
+        .status(200)
+        .send(userUtil.formatResponse(id, result, startDate));
+    } else {
+      return res.status(200).send(result);
+    }
   }
   return res.status(400).json({ message: 'Invalid parameters' });
 };

@@ -7,9 +7,9 @@ USE advoplan;
         PRIMARY KEY (id)
     );
 
-   CREATE TABLE time_slot(
+   CREATE TABLE timeslot(
         id INT NOT NULL auto_increment,
-        time_range VARCHAR(100) NOT NULL,
+        timeRange VARCHAR(100) NOT NULL,
         PRIMARY key(id)
     );
 
@@ -77,11 +77,11 @@ USE advoplan;
     CREATE TABLE appointments(
         id INT PRIMARY key auto_increment, 
         userId VARCHAR(100) NOT NULL,
-        laweyerId VARCHAR(100) NOT NULL,
-        time_slot INT NOT NULL,
+        lawyerId VARCHAR(100) NOT NULL,
+        timeslot INT NOT NULL,
         date DATE NOT NULL,
-        FOREIGN KEY (time_slot) REFERENCES time_slot(id),
-        FOREIGN KEY (laweyerId) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (timeslot) REFERENCES timeslot(id),
+        FOREIGN KEY (lawyerId) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
     );
 
@@ -91,15 +91,15 @@ USE advoplan;
     );
 
     CREATE TABLE lawyer_availability(
-        laweyerId VARCHAR(100) NOT NULL,
-        time_slot INT NOT NULL,
+        lawyerId VARCHAR(100) NOT NULL,
+        timeslot INT NOT NULL,
         date DATE NOT NULL,
         dayOfWeek INT NOT NULL,
         available BOOLEAN DEFAULT TRUE,
         FOREIGN KEY (dayOfWeek) REFERENCES week_days(id),
-        FOREIGN KEY (time_slot) REFERENCES time_slot(id),
-        FOREIGN KEY (laweyerId) REFERENCES users(id) ON DELETE CASCADE,
-        PRIMARY KEY(laweyerId,time_slot,date)
+        FOREIGN KEY (timeslot) REFERENCES timeslot(id),
+        FOREIGN KEY (lawyerId) REFERENCES users(id) ON DELETE CASCADE,
+        PRIMARY KEY(lawyerId,timeslot,date)
     );
 
     CREATE TABLE auth(

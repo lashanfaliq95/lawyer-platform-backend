@@ -110,14 +110,14 @@ exports.getLawyerAvailability = ({ id, startDate }) => {
 
   // return LawyerAvailability.findAll({
   //   attributes: [
-  //     ['laweyerId', 'id'],
-  //     ['time_slot', 'timeSlot'],
+  //     ['lawyerId', 'id'],
+  //     ['timeslot', 'timeSlot'],
   //     ['dayOfWeek', 'dayOfWeek'],
   //     'date',
   //   ],
   //   where: {
   //     available: true,
-  //     laweyerId: id,
+  //     lawyerId: id,
   //     date: {
   //       [Op.gt]: startDate,
   //       [Op.lte]: new Date(
@@ -126,10 +126,10 @@ exports.getLawyerAvailability = ({ id, startDate }) => {
   //     },
   //   },
   // });
-
+  console.log(id, startDate);
   return sequelize.query(
-    'SELECT laweyerId AS id, time_slot AS timeSlot, date, dayOfWeek as dayOfWeek ' +
-      'FROM lawyer_availability WHERE available = true AND laweyerId = ? AND ' +
+    'SELECT lawyerId AS id, timeSlot, date, dayOfWeek ' +
+      'FROM lawyer_availability WHERE available = 1 AND lawyerId = ? AND ' +
       'date > ? AND date <= DATE_ADD(?, INTERVAL 5 DAY)',
     { replacements: [id, startDate, startDate], type: QueryTypes.SELECT }
   );
@@ -139,7 +139,7 @@ exports.getLawyerAvailability = ({ id, startDate }) => {
   // return await new Promise((resolve, reject) => {
   //   return getConnection(async (connection) => {
   //     connection.query(
-  //       'SELECT laweyerId AS id, time_slot AS timeSlot, date, dayOfWeek as dayOfWeek FROM lawyer_availability WHERE available=true AND laweyerId=? AND date > ? AND date <= DATE_ADD(?,INTERVAL 5 DAY)',
+  //       'SELECT lawyerId AS id, timeslot AS timeSlot, date, dayOfWeek as dayOfWeek FROM lawyer_availability WHERE available=true AND lawyerId=? AND date > ? AND date <= DATE_ADD(?,INTERVAL 5 DAY)',
   //       [id, startDate, startDate],
   //       (error, result) => {
   //         if (error) {

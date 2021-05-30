@@ -11,7 +11,7 @@ const TimeSlot = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    time_range: {
+    timeRange: {
       type: Sequelize.STRING,
       allowNull: false,
     },

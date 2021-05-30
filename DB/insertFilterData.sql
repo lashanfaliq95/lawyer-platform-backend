@@ -147,7 +147,7 @@ INSERT INTO week_days(name) values
 ('Friday'),
 ('Saturday');
 
-        INSERT INTO time_slots(time_range) VALUES
+        INSERT INTO time_slots(timeRange) VALUES
         ('9:00, 9:15'),
         ('9:15, 9:30'),
         ('9:30, 9:45'),
