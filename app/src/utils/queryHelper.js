@@ -66,6 +66,6 @@ exports.createSearchQuery = ({
   const joinStatement = getJoinQuery({ specializations, languages });
   const likeStatement = getLikeStatement({ nameOrFirm });
   const limitStatement = getLimitStatement(page);
-console.log(`${selectUsersStatement} ${joinStatement} ${likeStatement} ${limitStatement};`)
-  return `${selectUsersStatement} ${joinStatement} ${likeStatement} ${limitStatement};`;
+  
+  return `${selectUsersStatement} ${joinStatement} ${likeStatement} ${limitStatement};`; 
 };

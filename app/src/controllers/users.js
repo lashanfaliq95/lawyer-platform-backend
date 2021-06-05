@@ -92,6 +92,10 @@ exports.createLawyer = async (req, res) => {
 exports.getLawyer = async (req, res) => {
   const { id } = req.params;
   const result = await userDao.getLawyer(id);
+  if (result && result[0] && result[0].firmId) {
+    const lawyersOfFirm = await userDao.getLawyersOfFirm(result[0].firmId);
+    result[0].lawyersOfFirm = lawyersOfFirm.map((lawyer) => lawyer.name);
+  }
   return res.status(200).send(result);
 };
 
