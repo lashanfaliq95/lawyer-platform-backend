@@ -77,9 +77,10 @@ exports.registerLawyer = ({
 
 exports.getLawyer = (id) => {
   return sequelize.query(
-    'SELECT DISTINCT id, CONCAT(firstName, " ", lastName ) as name, email, mobilePhone, road, houseNumber, zipCode, city, firm, imageUrl as imgUrl, fax, gender, expertId, latitude, longitude, specializationIds, languageIds FROM users' +
+    'SELECT DISTINCT users.id, CONCAT(firstName, " ", lastName ) as name, email, mobilePhone, road, houseNumber, zipCode, city, firms.name as firm, profileImageUrl as imgUrl, fax, gender, expertId, latitude, longitude, specializationIds, languageIds, legalIssues FROM users' +
       ' left join (select userId, group_concat(specialization_id) as specializationIds from user_specializations group by userId) a on users.id=a.userId' +
       ' left join (select userId, group_concat(languageId) as languageIds from user_languages group by userId) b on users.id=b.userId' +
+      ' left join firms on users.firmId=firms.id'+
       ' WHERE roleId=? AND users.id=?',
     { replacements: [2, id], type: QueryTypes.SELECT }
   );
@@ -96,7 +97,7 @@ exports.getLawyers = () => {
       'city',
       'zipCode',
       'firm',
-      ['imageUrl', 'imgUrl'],
+      ['profileImageUrl', 'imgUrl'],
       'mobilePhone',
       'latitude',
       'longitude',

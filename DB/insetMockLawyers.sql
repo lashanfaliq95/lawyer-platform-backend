@@ -1,54 +1,53 @@
+    INSERT INTO firm(name) values('Kanzlei Müller & Goeritz');
+    
     INSERT INTO
-    users( id , firstName , lastName , email , mobilePhone, password, firm , road, houseNumber, city, zipCode, roleId, imageUrl, latitude, longitude,gender, expertId) 
+    users( id , firstName , lastName , email , mobilePhone, password, firmId , road, houseNumber, city, zipCode, roleId, profileImageUrl, latitude, longitude,gender, expertId, fax,legalIssues) 
     VALUES
     (
-        'mock1', 'Dr. Kai', 'Rohs', 'mockEmail1@gmail.com', 'mocknumber', 'password1', 'Anwaltskanzlei Dr. Kai Rohs', 'Graf-Adolf-Strasse', '21', '40212', 'Düsseldorf', 2, 'http://www.anwaltskanzlei-dr-kai-rohs.de/wp-content/uploads/kai_rohs_quadrat-300x300.png' ,51.218730, 6.781260,'male',1
+        'mock1', 'Kai', 'Müller', 'arwin.sedaghat@yahoo.de', '0221 0025975', 'password1', 1, 'Schellenhofweg', '4', '50858', 'Köln', 2, 'http://www.anwaltskanzlei-dr-kai-rohs.de/wp-content/uploads/kai_rohs_quadrat-300x300.png' ,51.218730, 6.781260,'male',2,'0221 0025955', 'Erstberatung Sozialgeld,Schuldnerschein Beratung,Hartz 4,Steuerrechtliche Fragen'
     ),
         (
-        'mock2', 'Katja', 'Jungfermann', 'mockEmail2@gmail.com', 'mocknumber', 'password1', 'CLP Rechtsanwälte', 'Niederkasseler Lohweg' ,'18', '40547', 'Düsseldorf', 2, 'https://www.clp-rechtsanwaelte.de/wpdata/wp-content/uploads/2018/01/Katja-Jungfermann_2-1030x683.jpg' ,51.241920, 6.735210,'male',2
+        'mock2', 'Puya', 'Rafaei', 'arwin.sedaghat@gmail.com', '0221 5449595', 'password1', 1, 'Frankfurter Str.' ,'192', '51065', 'Köln', 2, 'https://www.clp-rechtsanwaelte.de/wpdata/wp-content/uploads/2018/01/Katja-Jungfermann_2-1030x683.jpg' ,51.241920, 6.735210,'male',2,'0221 5449496', 'Kündigungsschutzklagen,Tarifverträge,DSVGO-Bestimmungen,Compliance'
     ),
         (
-        'mock3', 'Dr. Rainer', 'Borgelt', 'mockEmail3@gmail.com', 'mocknumber', 'password1', 'Borgelt & Partner Rechtsanwälte mbB', 'Taubenstr.', '22', '40479', 'Düsseldorf', 2, 'https://i0.wp.com/borgelt.de/wp-content/uploads/2016/09/Rainer_Borgelt.jpg?resize=889%2C1030&ssl=1' , 51.231340, 6.782110,'male',3
+        'mock3', 'Robin', 'Goeritz', 'daryoushsedaghat@yahoo.de', '0221 3836903', 'password1', 1, 'Malteser Str.', '28', '50859', 'Köln', 2, 'https://i0.wp.com/borgelt.de/wp-content/uploads/2016/09/Rainer_Borgelt.jpg?resize=889%2C1030&ssl=1' , 51.231340, 6.782110,'male',2,'0221 5449490', 'Gesellschaftsrecht,Organrecht'
     ),
     (
-      'mock4', 'Anne', 'Lammers', 'mockEmail4', 'mocknumber@gmail.com', 'password1', 'MSH Rechtsanwälte GbR', 'Berliner Allee', '56', '40212', 'Düsseldorf', 2, 'https://www.msh-rechtsanwaelte.de/wp-content/uploads/2020/07/J.Rolfes.MSH_.AnneLammers200603.125.ret5-A5-SW-1024x658.jpg' ,51.218260, 6.782280,'female',1
+      'mock4', 'Paul', 'Weber', 'ariansedaghat@gmail.com', '0221 5959206','password1', null, 'Kirchröthe', '1', '95511', 'Mistelbach', 2, 'https://www.msh-rechtsanwaelte.de/wp-content/uploads/2020/07/J.Rolfes.MSH_.AnneLammers200603.125.ret5-A5-SW-1024x658.jpg' ,51.218260, 6.782280,'male',4,'0221 5449491','Immobilien,Unternehmen und Gesellschaften, Ehe, Partnerschaft & Familie,Verjährungsfristen'
    ),
     (
-      'mock5', 'Jan Niklas', 'Schulte', 'mockEmail5', 'mocknumber@gmail.com', 'password1', 'PETERS RechtsanwältePartnerschaftsgesellschaft mbB', 'Burggrafenstrasse', '5', '40545', 'Düsseldorf', 2, 'https://www.peters-legal.com/wp-content/uploads/peters-ra-schulte-jan-niklas-1.jpg' , 51.232500, 6.759500,'male',3
+      'mock5', 'Pia', 'Perez', 'arwinsedaghat@yahoo.de', '0221 6048484','password1',null, 'Rommerscheider Str.', '84B,', '51465', 'Bergisch Gladbach', 2, 'https://www.peters-legal.com/wp-content/uploads/peters-ra-schulte-jan-niklas-1.jpg' , 51.232500, 6.759500,'female',2,'0221 0025974', 'Steuern,Bilanzbuchhaltung,Umsatzsteuervoranmeldungen,Fristen'
    ),
     (
-      'mock6', 'Mélanie', 'Clerc', 'mockEmail6', 'mocknumber', 'password1@gmail.com', 'FRANZ RECHTSANWÄLTE Partnerschaftsgesellschaft mbB', 'Kaistrasse', '16A', '40221', 'Düsseldorf', 2, 'https://www.franzlegal.com/files/theme_files/lawyers/teams/FRANZlegalMC2.jpg', 51.262500, 6.8,'female',5
+      'mock6', 'Eva', 'Sanchez', 'elyasgrell@yahoo.com', '0221 3836903', 'password1', null, 'Frankfurter Str.', '192', '51065', 'Köln', 2, 'https://www.franzlegal.com/files/theme_files/lawyers/teams/FRANZlegalMC2.jpg', 51.262500, 6.8,'female',5,'0221 0025976','Erstberatung Sozialgeld,Schuldnerschein Beratung,Hartz 4'
    );
 
 
    INSERT INTO
    user_specializations(userId, specialization_id) 
    VALUES
-   ( 'mock1', 1),
    ( 'mock1', 2),
-   ( 'mock1', 5),
-   ( 'mock1', 6),
-   ( 'mock1', 10),
-   ( 'mock2', 1),
-   ( 'mock3', 1),
-   ( 'mock4', 1),
-   ( 'mock4', 3),
-   ( 'mock5', 3);
-
+   ( 'mock2', 2),
+   ( 'mock3', 12),
+   ( 'mock4', 2),
+   ( 'mock5', 2),
+   ( 'mock6', 2),
+   ( 'mock2', 6),
+   ( 'mock3', 10),
+   ( 'mock5', 11);
 
     INSERT INTO
    user_languages(userId, languageId) 
    VALUES
-   ( 'mock1', 1),
    ( 'mock1', 2),
-   ( 'mock1', 5),
-   ( 'mock1', 6),
-   ( 'mock1', 3),
-   ( 'mock2', 1),
-   ( 'mock3', 1),
-   ( 'mock4', 1),
-   ( 'mock4', 3),
-   ( 'mock5', 3);
+   ( 'mock2', 2),
+   ( 'mock3', 12),
+   ( 'mock4', 2),
+   ( 'mock5', 2),
+   ( 'mock6', 2),
+   ( 'mock2', 6),
+   ( 'mock3', 10),
+   ( 'mock5', 11);
 
    INSERT INTO lawyer_availability(lawyerId, timeslot, dayOfWeek, date, available) VALUES
    ('mock1', 2,3, STR_TO_DATE('19,11,2020','%d,%m,%Y'), TRUE),
@@ -60,7 +59,7 @@
    ('mock3', 2,4, STR_TO_DATE('25,11,2020','%d,%m,%Y'), TRUE),
    ('mock4', 3,4, STR_TO_DATE('20,11,2020','%d,%m,%Y'), TRUE);
 
-INSERT INTO appointments(lawyerId, userId, timeslot, date) VALUES
+INSERT INTO appointments(lawyerId, userId, timeSlotId, date) VALUES
    ('mock1','42f05ca1-868c-4060-92f4-bc044c67f7b5', 2, STR_TO_DATE('19,10,2020','%d,%m,%Y')),
    ('mock2','42f05ca1-868c-4060-92f4-bc044c67f7b5', 3, STR_TO_DATE('18,10,2020','%d,%m,%Y')),
    ('mock3','42f05ca1-868c-4060-92f4-bc044c67f7b5', 2, STR_TO_DATE('17,10,2020','%d,%m,%Y')),

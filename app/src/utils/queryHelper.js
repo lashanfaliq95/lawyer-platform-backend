@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const leftJoin = 'LEFT JOIN ?? on ??=?? ';
 const inArray = '?? in (?) AND ';
 
-const getJoinQuery = ({ specializations, languages }) => {
+const getJoinQuery = ({ specializations, languages, firm }) => {
   let joinStatement = '';
   let whereConditions = '';
 
@@ -32,6 +32,7 @@ const getJoinQuery = ({ specializations, languages }) => {
     whereConditions =
       whereConditions + mysql.format(inArray, ['languageId', languages]);
   }
+
   return `${joinStatement} WHERE roleId=2 AND${whereConditions}`;
 };
 
@@ -59,11 +60,12 @@ exports.createSearchQuery = ({
   page,
 }) => {
   const selectUsersStatement =
-    "SELECT DISTINCT id, CONCAT(firstName,' ', lastName ) as name, email, road, houseNumber, city, zipCode, firm, imageUrl, mobilePhone, latitude, longitude, expertId, city, gender, specializationIds FROM users" +
-    ' left join (select userId, group_concat(specialization_id) as specializationIds from user_specializations group by userId) a on users.id=a.userId';
+    "SELECT DISTINCT users.id, CONCAT(firstName,' ', lastName ) as name, email, road, houseNumber, city, zipCode, firms.name as firm, profileImageUrl as imgUrl, mobilePhone, latitude, longitude, expertId, city, gender, specializationIds FROM users" +
+    ' left join (select userId, group_concat(specialization_id) as specializationIds from user_specializations group by userId) a on users.id=a.userId' +
+    ' left join firms on users.firmId=firms.id';
   const joinStatement = getJoinQuery({ specializations, languages });
   const likeStatement = getLikeStatement({ nameOrFirm });
   const limitStatement = getLimitStatement(page);
-
+console.log(`${selectUsersStatement} ${joinStatement} ${likeStatement} ${limitStatement};`)
   return `${selectUsersStatement} ${joinStatement} ${likeStatement} ${limitStatement};`;
 };

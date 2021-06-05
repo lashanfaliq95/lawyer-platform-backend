@@ -39,7 +39,7 @@ USE advoplan;
         roleId INT NOT NULL,
         expert_type VARCHAR(100),
         gender VARCHAR(5),
-        imageUrl VARCHAR(100),
+        profileImageUrl VARCHAR(100),
         road VARCHAR(100),
         houseNumber VARCHAR(10),
         city VARCHAR(100),
