@@ -1,7 +1,7 @@
-    INSERT INTO firm(name) values('Kanzlei Müller & Goeritz');
+    INSERT INTO firms(name) values('Kanzlei Müller & Goeritz');
     
     INSERT INTO
-    users( id , firstName , lastName , email , mobilePhone, password, firmId , road, houseNumber, city, zipCode, roleId, profileImageUrl, latitude, longitude,gender, expertId, fax,legalIssues) 
+    users( id , firstName , lastName , email , mobilePhone, password, firmId , road, houseNumber,zipCode, city,roleId, profileImageUrl, latitude, longitude,gender, expertId, fax,legalIssues) 
     VALUES
     (
         'mock1', 'Kai', 'Müller', 'arwin.sedaghat@yahoo.de', '0221 0025975', 'password1', 1, 'Schellenhofweg', '4', '50858', 'Köln', 2, 'http://www.anwaltskanzlei-dr-kai-rohs.de/wp-content/uploads/kai_rohs_quadrat-300x300.png' ,51.218730, 6.781260,'male',2,'0221 0025955', 'Erstberatung Sozialgeld,Schuldnerschein Beratung,Hartz 4,Steuerrechtliche Fragen'

@@ -32,12 +32,20 @@ exports.getSearchResults = ({
   languages,
   nameOrFirm,
   page,
+  location,
+  isAppointmentNotRequireApproval,
 }) => {
+  console.log(
+    'isAppointmentNotRequireApproval',
+    isAppointmentNotRequireApproval === 'false'
+  );
   const searchQuery = queryHelper.createSearchQuery({
     specializations,
     languages,
     nameOrFirm,
     page,
+    location,
+    isAppointmentNotRequireApproval,
   });
 
   return sequelize.query(searchQuery, { type: QueryTypes.SELECT });

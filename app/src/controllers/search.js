@@ -7,7 +7,7 @@ exports.filterLawyers = async (req, res) => {
     availability,
     specializations,
     freeFirstAppointment,
-    appointmentWithImmediateConfirmation,
+    isAppointmentNotRequireApproval,
     languages,
     nameOrFirm,
     location,
@@ -19,9 +19,12 @@ exports.filterLawyers = async (req, res) => {
   const result = await dao.getSearchResults({
     specializations: specializationsArray,
     languages: languageArray,
+    location,
     nameOrFirm,
     page,
+    isAppointmentNotRequireApproval: isAppointmentNotRequireApproval === 'true',
   });
+
   const updatedResult =
     result &&
     result.map((lawyer) => ({
