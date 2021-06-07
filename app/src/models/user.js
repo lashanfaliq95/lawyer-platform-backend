@@ -45,6 +45,8 @@ const Users = sequelize.define(
     latitude: DECIMAL(8, 6),
     expertId: INTEGER,
     legalIssues:STRING,
+    buildingParking:STRING,
+    buildingFloor:STRING,
     isAccountConfirmed: {
       type: BOOLEAN,
       defaultValue: 0,
@@ -64,7 +66,11 @@ const Users = sequelize.define(
     isAppointmentRequireApproval:{
       type: BOOLEAN,
       defaultValue: 0,
-    }
+    },
+    isBuildingDisabledFriendly:{
+      type: BOOLEAN,
+      defaultValue: 0,
+    },
   },
   { timestamps: false }
 );
