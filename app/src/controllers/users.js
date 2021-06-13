@@ -5,6 +5,10 @@ const dateUtil = require('../utils/date');
 const userUtil = require('../utils/user');
 const { sendConfirmAccountEmail } = require('../helper/emailHelper');
 const { appointments } = require('../mocks');
+const {
+  sendConfirmRegistrationEmail,
+  sendHelpNotification,
+} = require('../helper/emailHelper');
 
 exports.createUser = async (req, res) => {
   const { firstName, lastName, mobilePhone, email, password } = req.body;
@@ -20,6 +24,13 @@ exports.createUser = async (req, res) => {
         mobilePhone,
         email,
         password: encryptedPassword,
+      });
+
+      await sendConfirmRegistrationEmail(email, {
+        firstName,
+        lastName,
+        password,
+        email,
       });
 
       return res.status(200).send({
@@ -212,6 +223,7 @@ exports.createUserMessage = async (req, res) => {
   const { message } = req.body;
   if (id && message) {
     await userDao.saveUserMessage({ id, message });
+    await sendHelpNotification({ message, id });
     return res
       .status(200)
       .send({ message: 'Successfully updated user password' });
