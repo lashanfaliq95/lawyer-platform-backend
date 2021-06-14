@@ -21,6 +21,7 @@ if (process.env.NODE_ENV !== 'prod') {
 const whitelist = [
   'http://localhost:3000',
   'http://avoplan.s3-website.us-east-2.amazonaws.com',
+  'http://lawyer-platform.s3-website.us-east-2.amazonaws.com'
 ];
 
 const corsOptionsDelegate = function (req, callback) {
