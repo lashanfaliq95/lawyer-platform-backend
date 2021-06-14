@@ -5,6 +5,10 @@ const dateUtil = require('../utils/date');
 const userUtil = require('../utils/user');
 const { sendConfirmAccountEmail } = require('../helper/emailHelper');
 const { appointments } = require('../mocks');
+const {
+  sendConfirmRegistrationEmail,
+  sendHelpNotification,
+} = require('../helper/emailHelper');
 
 exports.createUser = async (req, res) => {
   const { firstName, lastName, mobilePhone, email, password } = req.body;
@@ -20,6 +24,13 @@ exports.createUser = async (req, res) => {
         mobilePhone,
         email,
         password: encryptedPassword,
+      });
+
+      await sendConfirmRegistrationEmail(email, {
+        firstName,
+        lastName,
+        password,
+        email,
       });
 
       return res.status(200).send({
@@ -92,6 +103,10 @@ exports.createLawyer = async (req, res) => {
 exports.getLawyer = async (req, res) => {
   const { id } = req.params;
   const result = await userDao.getLawyer(id);
+  if (result && result[0] && result[0].firmId) {
+    const lawyersOfFirm = await userDao.getLawyersOfFirm(result[0].firmId);
+    result[0].lawyersOfFirm = lawyersOfFirm.map((lawyer) => lawyer.name);
+  }
   return res.status(200).send(result);
 };
 
@@ -104,16 +119,17 @@ exports.getLawyerAvailability = async (req, res) => {
   const { id } = req.params;
   const { startDate } = req.query;
   if (id) {
-    // const result = await userDao.getLawyerAvailability({
-    //   id,
-    //   startDate: dateUtil.getMySqlDate(startDate),
-    // });
-    // if (result && udresult.length > 0) {
-    //   res.status(200).send(userUtil.formatResponse(id, result, startDate));
-    // } else {
-    //   res.status(200).send(result);
-    // }
-    return res.status(501).json({ message: 'not implemented' });
+    const result = await userDao.getLawyerAvailability({
+      id,
+      startDate: dateUtil.getMySqlDate(startDate),
+    });
+    if (result && result.length > 0) {
+      return res
+        .status(200)
+        .send(userUtil.formatResponse(id, result, startDate));
+    } else {
+      return res.status(200).send(result);
+    }
   }
   return res.status(400).json({ message: 'Invalid parameters' });
 };
@@ -207,6 +223,7 @@ exports.createUserMessage = async (req, res) => {
   const { message } = req.body;
   if (id && message) {
     await userDao.saveUserMessage({ id, message });
+    await sendHelpNotification({ message, id });
     return res
       .status(200)
       .send({ message: 'Successfully updated user password' });

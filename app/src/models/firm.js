@@ -2,8 +2,8 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../connectors/database');
 
-const TimeSlot = sequelize.define(
-  'time_slot',
+const Firm = sequelize.define(
+  'firms',
   {
     id: {
       type: Sequelize.INTEGER,
@@ -11,7 +11,7 @@ const TimeSlot = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    timeRange: {
+    name: {
       type: Sequelize.STRING,
       allowNull: false,
     },
@@ -19,4 +19,4 @@ const TimeSlot = sequelize.define(
   { timestamps: false }
 );
 
-module.exports = TimeSlot;
+module.exports = Firm;

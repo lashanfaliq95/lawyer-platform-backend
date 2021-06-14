@@ -22,7 +22,7 @@ const Appointment = sequelize.define(
 );
 
 Appointment.belongsTo(User, { targetKey: 'id', foreignKey: 'userId' });
-Appointment.belongsTo(User, { targetKey: 'id', foreignKey: 'laweyerId' });
+Appointment.belongsTo(User, { targetKey: 'id', foreignKey: 'lawyerId' });
 Appointment.belongsTo(TimeSlot, {
   targetKey: 'id',
   foreignKey: 'timeSlotId',

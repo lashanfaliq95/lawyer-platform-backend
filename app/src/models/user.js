@@ -3,6 +3,7 @@ const { STRING, INTEGER, DECIMAL, BOOLEAN } = require('sequelize');
 const sequelize = require('../connectors/database');
 const Role = require('./role');
 const ExpertTypes = require('./expertTypes');
+const  Firm  = require('./firm');
 
 const Users = sequelize.define(
   'users',
@@ -37,13 +38,36 @@ const Users = sequelize.define(
     houseNumber: STRING,
     city: STRING,
     zipCode: STRING,
-    firm: STRING,
     gender: STRING,
-    imageUrl: STRING,
+    profileImageUrl: STRING,
+    coverImageUrl:STRING,
     longitude: DECIMAL(9, 6),
     latitude: DECIMAL(8, 6),
     expertId: INTEGER,
+    legalIssues:STRING,
+    buildingParking:STRING,
+    buildingFloor:STRING,
     isAccountConfirmed: {
+      type: BOOLEAN,
+      defaultValue: 0,
+    },
+    isLawyerAcceptingNewClients: {
+      type: BOOLEAN,
+      defaultValue: 0,
+    },
+    isLawyerOfferingPhoneAndVisitingAppointments: {
+      type: BOOLEAN,
+      defaultValue: 0,
+    },
+    isRequireShortSummary:{
+      type: BOOLEAN,
+      defaultValue: 0,
+    },
+    isAppointmentRequireApproval:{
+      type: BOOLEAN,
+      defaultValue: 0,
+    },
+    isBuildingDisabledFriendly:{
       type: BOOLEAN,
       defaultValue: 0,
     },
@@ -53,4 +77,5 @@ const Users = sequelize.define(
 
 Users.belongsTo(Role, { targetKey: 'id', foreignKey: 'roleId' });
 Users.belongsTo(ExpertTypes, { targetKey: 'id', foreignKey: 'expertId' });
+Users.belongsTo(Firm, { targetKey: 'id', foreignKey: 'firmId' });
 module.exports = Users;

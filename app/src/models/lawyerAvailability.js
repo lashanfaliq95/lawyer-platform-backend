@@ -1,16 +1,19 @@
-const Sequelize = require('sequelize');
+const { DATE, BOOLEAN, INTEGER } = require('sequelize');
 
 const sequelize = require('../connectors/database');
+const User = require('./user');
+const TimeSlot = require('./timeSlot');
+const WeekDay = require('./weekDay');
 
 const LawyerAvailability = sequelize.define(
   'lawyer_availability',
   {
     date: {
-      type: Sequelize.DATE,
+      type: DATE,
       allowNull: false,
     },
     available: {
-      type: Sequelize.BOOLEAN,
+      type: BOOLEAN,
       allowNull: false,
       defaultValue: true,
     },
@@ -18,10 +21,17 @@ const LawyerAvailability = sequelize.define(
   { timestamps: false, freezeTableName: true }
 );
 
-// foreign keys and primary key to be added
-// FOREIGN KEY (dayOfWeek) REFERENCES week_days(id),
-// FOREIGN KEY (time_slot) REFERENCES time_slot(id),
-// FOREIGN KEY (laweyerId) REFERENCES users(id),
-// PRIMARY KEY(laweyerId,time_slot,date)
+LawyerAvailability.belongsTo(User, {
+  targetKey: 'id',
+  foreignKey: 'lawyerId',
+});
+LawyerAvailability.belongsTo(WeekDay, {
+  targetKey: 'id',
+  foreignKey: 'dayOfWeek',
+});
+LawyerAvailability.belongsTo(TimeSlot, {
+  targetKey: 'id',
+  foreignKey: 'timeSlot',
+});
 
 module.exports = LawyerAvailability;
