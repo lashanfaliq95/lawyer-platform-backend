@@ -35,10 +35,6 @@ exports.getSearchResults = ({
   location,
   isAppointmentNotRequireApproval,
 }) => {
-  console.log(
-    'isAppointmentNotRequireApproval',
-    isAppointmentNotRequireApproval === 'false'
-  );
   const searchQuery = queryHelper.createSearchQuery({
     specializations,
     languages,

@@ -52,7 +52,7 @@ const getLikeStatement = ({ nameOrFirm, location }) => {
     );
   }
   if (location) {
-    const matchLocation = `%${location}%`;
+    const matchLocation = `${location}`;
     if(likeStatement){
       likeStatement=`${likeStatement} AND ${mysql.format('city LIKE ?', [matchLocation])}`
     }

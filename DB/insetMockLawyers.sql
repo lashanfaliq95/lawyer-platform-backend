@@ -50,14 +50,14 @@
    ( 'mock5', 11);
 
    INSERT INTO lawyer_availability(lawyerId, timeslot, dayOfWeek, date, available) VALUES
-   ('mock1', 2,3, STR_TO_DATE('19,11,2020','%d,%m,%Y'), TRUE),
-   ('mock2', 2,2, STR_TO_DATE('18,11,2020','%d,%m,%Y'), false),
-   ('mock3', 2,1, STR_TO_DATE('17,11,2020','%d,%m,%Y'), TRUE),
-   ('mock4', 2,4, STR_TO_DATE('20,11,2020','%d,%m,%Y'), false),
-   ('mock1', 3,4, STR_TO_DATE('21,11,2020','%d,%m,%Y'), TRUE),
-   ('mock2', 4,5, STR_TO_DATE('22,11,2020','%d,%m,%Y'), TRUE),
-   ('mock3', 2,4, STR_TO_DATE('25,11,2020','%d,%m,%Y'), TRUE),
-   ('mock4', 3,4, STR_TO_DATE('20,11,2020','%d,%m,%Y'), TRUE);
+   ('mock1', 2,3, STR_TO_DATE('19,06,2021','%d,%m,%Y'), TRUE),
+   ('mock2', 2,2, STR_TO_DATE('18,06,2021','%d,%m,%Y'), false),
+   ('mock3', 2,1, STR_TO_DATE('17,06,2021','%d,%m,%Y'), TRUE),
+   ('mock4', 2,4, STR_TO_DATE('20,06,2021','%d,%m,%Y'), false),
+   ('mock1', 3,4, STR_TO_DATE('21,06,2021','%d,%m,%Y'), TRUE),
+   ('mock2', 4,5, STR_TO_DATE('22,06,2021','%d,%m,%Y'), TRUE),
+   ('mock3', 2,4, STR_TO_DATE('25,06,2021','%d,%m,%Y'), TRUE),
+   ('mock4', 3,4, STR_TO_DATE('20,06,2021','%d,%m,%Y'), TRUE);
 
 INSERT INTO appointments(lawyerId, userId, timeSlotId, date) VALUES
    ('mock1','42f05ca1-868c-4060-92f4-bc044c67f7b5', 2, STR_TO_DATE('19,10,2020','%d,%m,%Y')),
